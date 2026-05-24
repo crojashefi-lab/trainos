@@ -144,10 +144,17 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="login-sub">Plataforma de entrenamiento deportivo</div>
     </div>
     <div id="login-error" class="login-error hidden"></div>
-    <div class="form-group"><label>Correo electrónico</label><input type="email" id="login-email" placeholder="tu@correo.com"></div>
-    <div class="form-group"><label>Contraseña</label><input type="password" id="login-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div class="form-group"><label>Usuario</label><input type="text" id="login-email" placeholder="nombre apellido" autocomplete="username" style="text-transform:lowercase" oninput="this.value=this.value.toLowerCase()"></div>
+    <div class="form-group"><label>Contraseña</label>
+    <div style="position:relative">
+      <input type="password" id="login-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()" style="padding-right:42px">
+      <button type="button" onclick="togglePw()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text3);padding:4px" title="Ver contraseña">
+        <svg id="pw-eye" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+    </div></div>
     <button class="btn btn-primary fw" id="login-btn" onclick="doLogin()" style="margin-top:8px">Ingresar</button>
-  </div>
+    <div style="margin-top:20px;text-align:center;font-size:11px;color:var(--text3)">App desarrollada por <strong style="color:var(--text2)">MSc. Claudio Rojas H.</strong></div>
+</div>
 </div>
 
 <!-- APP ENTRENADOR -->
@@ -221,6 +228,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="page-header"><div><div class="page-title">Cumplimiento</div><div class="page-sub">Seguimiento de sesiones</div></div></div>
       <div class="page-body"><div id="compliance-content"></div></div>
     </div>
+    <div style="padding:8px 16px;text-align:center;font-size:10px;color:var(--text3)">MSc. Claudio Rojas H.</div>
   </div>
 </div>
 
@@ -304,14 +312,20 @@ let cache = { athletes:[], exercises:[], routines:[], logs:[] };
 let builderDays = [], builderCurrentDay = 0, selectedRpe = null;
 
 // ── AUTH ─────────────────────────────────────────────
+window.togglePw = () => {
+  const inp = ge('login-password');
+  const show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  ge('pw-eye').style.opacity = show ? '1' : '0.4';
+};
 window.doLogin = async () => {
-  const email = ge('login-email').value.trim().toLowerCase();
+  const username = ge('login-email').value.trim().toLowerCase();
   const pw = ge('login-password').value;
-  if(!email||!pw){ showError('Completa todos los campos'); return; }
+  if(!username||!pw){ showError('Completa todos los campos'); return; }
   const btn = ge('login-btn');
   btn.disabled=true; btn.innerHTML='<span class="spin"></span> Ingresando...';
   try {
-    const users = await getFiltered('users','email',email);
+    const users = await getFiltered('users','username',username);
     const u = users.find(x=>x.password===pw);
     if(!u){ showError('Correo o contraseña incorrectos'); return; }
     currentUser = u;
@@ -418,7 +432,7 @@ window.openAthleteModal = async (id) => {
     <div class="form-group"><label>Observaciones / Lesiones</label><textarea id="fm-notes">${a?a.notes||'':''}</textarea></div>
     ${!a?`<div class="divider"></div><div class="section-title">Acceso del deportista</div>
     <div class="grid2">
-      <div class="form-group"><label>Email de acceso</label><input type="email" id="fm-email" placeholder="atleta@correo.cl"></div>
+      <div class="form-group"><label>Usuario de acceso</label><input type="text" id="fm-email" placeholder="nombre apellido" oninput="this.value=this.value.toLowerCase()"></div>
       <div class="form-group"><label>Contraseña</label><input type="password" id="fm-pw" placeholder="mínimo 6 caracteres"></div>
     </div>`:''}
     <div class="divider"></div>
@@ -441,9 +455,9 @@ window.saveAthlete = async id => {
     } else {
       const newA = await addDoc2('athletes',{...data,assignedTo:[]});
       cache.athletes.push(newA);
-      const emailEl=ge('fm-email'), pwEl=ge('fm-pw');
-      if(emailEl?.value && pwEl?.value){
-        await addDoc2('users',{email:emailEl.value.trim().toLowerCase(), password:pwEl.value, role:'athlete', name, athleteId:newA.id});
+      const usernameEl=ge('fm-email'), pwEl=ge('fm-pw');
+      if(usernameEl?.value && pwEl?.value){
+        await addDoc2('users',{username:usernameEl.value.trim().toLowerCase(), password:pwEl.value, role:'athlete', name, athleteId:newA.id});
       }
     }
     closeModal(); renderAthletes(); showToast('Deportista guardado','success');
@@ -937,9 +951,9 @@ function renderAthProfile(){
 // Crear usuario coach si no existe
 (async()=>{
   try {
-    const existing = await getFiltered('users','email','coach@trainos.cl');
+    const existing = await getFiltered('users','username','coach@trainos.cl');
     if(!existing.length){
-      await addDoc2('users',{email:'coach@trainos.cl',password:'coach123',role:'coach',name:'Carlos Rojas'});
+      await addDoc2('users',{username:'coach@trainos.cl',password:'coach123',role:'coach',name:'Marcelo Parada'});
     }
   } catch(e){ console.error(e); }
 })();
