@@ -602,7 +602,13 @@ function renderBuilderDay(){
   const exOpts=cache.exercises.map(e=>`<option value="${e.id}">${e.name} (${e.category})</option>`).join('');
   c.innerHTML=`
     <div class="grid2" style="margin-bottom:12px">
-      <div class="form-group"><label>Día</label><select onchange="builderDays[${builderCurrentDay}].day=this.value">${['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'].map(dy=>`<option ${d.day===dy?'selected':''}>${dy}</option>`).join('')}</select></div>
+      <div class="form-group"><label>Día</label>
+        <div class="flex gap8" style="flex-wrap:wrap">
+          ${['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'].map(dy=>`
+            <div onclick="builderDays[${builderCurrentDay}].day=this.dataset.day;document.querySelectorAll('.day-pill').forEach(x=>x.classList.remove('day-sel'));this.classList.add('day-sel')" data-day="${dy}" class="day-pill" style="padding:6px 12px;border-radius:20px;cursor:pointer;font-size:13px;font-weight:600;border:1px solid var(--border);background:${d.day===dy?'var(--accent)':'var(--bg4)'};color:${d.day===dy?'#0f1117':'var(--text2)'};transition:.15s">${dy}</div>
+          `).join('')}
+        </div>
+      </div>
       <div class="form-group"><label>Etiqueta</label><input value="${d.label}" placeholder="Sesión A — Fuerza" onchange="builderDays[${builderCurrentDay}].label=this.value"></div>
     </div>
     ${(d.blocks||[]).map((b,bi)=>`
@@ -644,11 +650,25 @@ window.setExId = (di,bi,ei,val) => { if(builderDays[di]&&builderDays[di].blocks[
 window.addExToBlock = (di,bi) => { builderDays[di].blocks[bi].exercises.push({exId:'',sets:3,reps:'5',load:'',intensity:'',rpe:7,rest:'3min',tempo:'',notes:''}); renderBuilderDay(); };
 window.removeEx = (di,bi,ei) => { builderDays[di].blocks[bi].exercises.splice(ei,1); renderBuilderDay(); };
 
-window.saveRoutine = async editId => { syncBuilderFromDOM();
+window.saveRoutine = async editId => {
+  // Leer TODOS los selects del DOM antes de guardar
+  const c = ge('builder-day-content');
+  if(c){
+    const d = builderDays[builderCurrentDay];
+    if(d){
+      (d.blocks||[]).forEach((b,bi)=>{
+        (b.exercises||[]).forEach((ex,ei)=>{
+          const sel = c.querySelector(`[data-bi="${bi}"][data-ei="${ei}"]`);
+          if(sel && sel.value) ex.exId = sel.value;
+        });
+      });
+    }
+  }
   const name = ge('rt-name').value.trim();
   if(!name){ showToast('Nombre obligatorio','error'); return; }
   const btn=ge('save-rt-btn'); btn.disabled=true; btn.innerHTML='<span class="spin"></span>';
-  const data = {name, objective:ge('rt-obj').value, startDate:ge('rt-start').value||null, endDate:ge('rt-end').value||null, days:builderDays, status:'active', assignedTo:[]};
+  const existing = editId ? (cache.routines.find(r=>r.id===editId)||{}) : {};
+  const data = {name, objective:ge('rt-obj').value, startDate:ge('rt-start').value||null, endDate:ge('rt-end').value||null, days:builderDays, status:'active', assignedTo:existing.assignedTo||[]};
   try {
     if(editId){
       await updateDoc2('routines',editId,{name:data.name,objective:data.objective,startDate:data.startDate,endDate:data.endDate,days:data.days});
