@@ -585,7 +585,16 @@ function renderBuilderTabs(){
   const tabs=ge('builder-day-tabs'); if(!tabs) return;
   tabs.innerHTML=builderDays.map((d,i)=>`<div onclick="switchBuilderDay(${i})" style="padding:7px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;${i===builderCurrentDay?'background:var(--accent);color:#0f1117':'background:var(--bg4);color:var(--text2)'}">${d.day}</div>`).join('');
 }
-window.switchBuilderDay = i => { builderCurrentDay=i; renderBuilderTabs(); renderBuilderDay(); };
+window.switchBuilderDay = i => { syncBuilderFromDOM(); builderCurrentDay=i; renderBuilderTabs(); renderBuilderDay(); };
+function syncBuilderFromDOM(){
+  const c = ge('builder-day-content'); if(!c) return;
+  const d = builderDays[builderCurrentDay]; if(!d) return;
+  const sels = c.querySelectorAll('select[data-bi]');
+  sels.forEach(sel => {
+    const bi = +sel.dataset.bi, ei = +sel.dataset.ei;
+    if(d.blocks[bi]&&d.blocks[bi].exercises[ei]) d.blocks[bi].exercises[ei].exId = sel.value;
+  });
+}
 
 function renderBuilderDay(){
   const c=ge('builder-day-content'); if(!c||!builderDays[builderCurrentDay]) return;
@@ -604,7 +613,7 @@ function renderBuilderDay(){
           <div class="exercise-block">
             <div class="flex ac jb" style="margin-bottom:10px">
               <div class="flex ac gap8"><div class="ex-number">${ei+1}</div>
-                <select style="width:220px;padding:5px 8px;font-size:13px" onchange="builderDays[${builderCurrentDay}].blocks[${bi}].exercises[${ei}].exId=this.value">
+                <select data-bi="${bi}" data-ei="${ei}" style="width:220px;padding:5px 8px;font-size:13px" onchange="setExId(${builderCurrentDay},${bi},${ei},this.value)">
                   <option value="">— Seleccionar —</option>${exOpts}
                 </select>
               </div>
@@ -625,16 +634,17 @@ function renderBuilderDay(){
   // Set select values
   (d.blocks||[]).forEach((b,bi)=>{
     (b.exercises||[]).forEach((ex,ei)=>{
-      const allSels = c.querySelectorAll('.exercise-block select');
-      let idx=0;
-      (d.blocks||[]).forEach((bb,bbi)=>(bb.exercises||[]).forEach((_,eei)=>{ if(bbi===bi&&eei===ei&&allSels[idx]) allSels[idx].value=ex.exId||''; idx++; }));
+      // Set select value para este ejercicio específico
+      const thisBlockSels = c.querySelectorAll(`[data-bi="${bi}"][data-ei="${ei}"]`);
+      if(thisBlockSels[0]) thisBlockSels[0].value = ex.exId||'';
     });
   });
 }
+window.setExId = (di,bi,ei,val) => { if(builderDays[di]&&builderDays[di].blocks[bi]&&builderDays[di].blocks[bi].exercises[ei]) builderDays[di].blocks[bi].exercises[ei].exId=val; };
 window.addExToBlock = (di,bi) => { builderDays[di].blocks[bi].exercises.push({exId:'',sets:3,reps:'5',load:'',intensity:'',rpe:7,rest:'3min',tempo:'',notes:''}); renderBuilderDay(); };
 window.removeEx = (di,bi,ei) => { builderDays[di].blocks[bi].exercises.splice(ei,1); renderBuilderDay(); };
 
-window.saveRoutine = async editId => {
+window.saveRoutine = async editId => { syncBuilderFromDOM();
   const name = ge('rt-name').value.trim();
   if(!name){ showToast('Nombre obligatorio','error'); return; }
   const btn=ge('save-rt-btn'); btn.disabled=true; btn.innerHTML='<span class="spin"></span>';
@@ -826,7 +836,7 @@ function renderAthToday(){
           const exData=cache.exercises.find(x=>x.id===ex.exId);
           const uid=`ex_${r.id}_${b.name}_${ei}`.replace(/\s/g,'_');
           html+=`<div class="ex-row"><div class="ex-check" id="chk_${uid}" onclick="toggleExCheck('${uid}')"></div>
-            <div style="flex:1"><div style="font-size:14px;font-weight:600">${exData?exData.name:'Ejercicio'}</div>
+            <div style="flex:1"><div style="font-size:14px;font-weight:600">${exData?exData.name:ex.exId?'Cargando...':'Sin ejercicio asignado'}</div>
             <div class="flex gap8 mt8" style="flex-wrap:wrap"><span class="tag">${ex.sets}×${ex.reps}</span>${ex.load?`<span class="tag">${ex.load}</span>`:''}<span class="tag">RPE ${ex.rpe}</span><span class="tag">⏱ ${ex.rest}</span></div>
             ${ex.notes?`<div style="font-size:11px;color:var(--text3);margin-top:6px">💡 ${ex.notes}</div>`:''}
             ${(()=>{if(!exData?.video)return '';const m=exData.video.match(/(?:v=|youtu\.be\/)?([\w-]{11})/);return m?`<button onclick="openVideoModal('${m[1]}','${(exData.name||'').replace(/'/g,"\\'")}')" style="font-size:11px;color:var(--accent2);background:none;border:none;cursor:pointer;padding:0;margin-top:6px;display:block">▶ Ver video</button>`:'';})()} 
