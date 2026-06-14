@@ -2,966 +2,1244 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0f1117">
-<title>TrainOS</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0a0f">
+<title>GymFlow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
---bg:#0f1117;--bg2:#181c27;--bg3:#1e2235;--bg4:#252a3d;
---accent:#00d4aa;--accent2:#0099ff;
---text:#e8eaf2;--text2:#9399b2;--text3:#5a6080;
---border:#2a2f45;--border2:#353b55;
---success:#00c97a;--warn:#f5a623;--danger:#ff4757;
---card:#1e2235;--radius:10px;--radius2:16px;
+  --bg:#0a0a0f;--bg2:#111118;--bg3:#18181f;--bg4:#1f1f28;--bg5:#26262f;
+  --border:#ffffff0d;--border2:#ffffff18;--border3:#ffffff25;
+  --text:#eeeef5;--text2:#8888a0;--text3:#44445a;
+  --accent:#6c47ff;--accent2:#8b6fff;--accentbg:#6c47ff18;
+  --green:#10b981;--greenbg:#10b98115;
+  --yellow:#f59e0b;--yellowbg:#f59e0b15;
+  --red:#ef4444;--redbg:#ef444415;
+  --blue:#3b82f6;--bluebg:#3b82f615;
+  --r:10px;--r2:14px;--r3:18px;
 }
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap');
-body{font-family:'Syne',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-.hidden{display:none!important}
-.flex{display:flex}.gap8{gap:8px}.gap12{gap:12px}.gap16{gap:16px}
-.col{flex-direction:column}.ac{align-items:center}.jb{justify-content:space-between}.je{justify-content:flex-end}
-.fw{width:100%}.mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mt24{margin-top:24px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
-.badge-green{background:rgba(0,201,122,.15);color:var(--success)}
-.badge-warn{background:rgba(245,166,35,.15);color:var(--warn)}
-.badge-blue{background:rgba(0,153,255,.15);color:var(--accent2)}
-.badge-accent{background:rgba(0,212,170,.15);color:var(--accent)}
-.tag{background:var(--bg4);color:var(--text2);padding:3px 9px;border-radius:6px;font-size:11px}
-::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
-input,select,textarea{background:var(--bg4);border:1px solid var(--border);color:var(--text);border-radius:var(--radius);padding:10px 14px;font-family:'Syne',system-ui,sans-serif;font-size:14px;width:100%;transition:.2s}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);background:var(--bg3)}
-input::placeholder,textarea::placeholder{color:var(--text3)}
-select option{background:var(--bg3)}
-textarea{resize:vertical;min-height:80px}
-label{font-size:13px;color:var(--text2);margin-bottom:5px;display:block;font-weight:500}
-.form-group{display:flex;flex-direction:column;margin-bottom:14px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 18px;border-radius:var(--radius);border:none;cursor:pointer;font-family:'Syne',system-ui,sans-serif;font-size:14px;font-weight:600;transition:.2s;white-space:nowrap}
-.btn:active{transform:scale(.97)}.btn:disabled{opacity:.5;cursor:not-allowed}
-.btn-primary{background:var(--accent);color:#0f1117}.btn-primary:hover:not(:disabled){background:#00bfa0}
-.btn-secondary{background:var(--bg4);color:var(--text);border:1px solid var(--border2)}.btn-secondary:hover{background:var(--bg3);border-color:var(--accent)}
-.btn-danger{background:rgba(255,71,87,.15);color:var(--danger);border:1px solid rgba(255,71,87,.2)}.btn-danger:hover{background:rgba(255,71,87,.25)}
-.btn-blue{background:var(--accent2);color:#fff}.btn-blue:hover{background:#007acc}
-.btn-sm{padding:6px 12px;font-size:12px}
-.btn-icon{padding:8px;border-radius:8px;background:var(--bg4);border:1px solid var(--border);color:var(--text2);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:.2s}.btn-icon:hover{color:var(--accent)}
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius2);padding:20px}
-.card-sm{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px}
-.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius2);padding:20px;position:relative;overflow:hidden}
-.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
-.stat-card.green::before{background:var(--success)}.stat-card.blue::before{background:var(--accent2)}
-.stat-card.accent::before{background:var(--accent)}.stat-card.warn::before{background:var(--warn)}
-.stat-val{font-size:32px;font-weight:800;line-height:1;margin-bottom:4px}
-.stat-lbl{font-size:12px;color:var(--text2);font-weight:500;letter-spacing:.5px;text-transform:uppercase}
-#app-shell{display:flex;height:100vh;overflow:hidden}
-#sidebar{width:240px;min-width:240px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100}
-.sidebar-logo{padding:20px 20px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
-.logo-mark{width:34px;height:34px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#0f1117;flex-shrink:0}
-.logo-text{font-size:20px;font-weight:800;letter-spacing:-1px}
-.sidebar-section{padding:16px 12px 6px;font-size:10px;color:var(--text3);font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
-.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);margin:2px 8px;cursor:pointer;color:var(--text2);font-size:14px;font-weight:500;transition:.15s}
-.nav-item:hover{background:var(--bg3);color:var(--text)}.nav-item.active{background:rgba(0,212,170,.1);color:var(--accent);font-weight:600}
-.sidebar-footer{margin-top:auto;padding:16px;border-top:1px solid var(--border)}
-.user-pill{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg3);border-radius:var(--radius)}
-.avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
-.avatar-green{background:rgba(0,212,170,.2);color:var(--accent)}.avatar-blue{background:rgba(0,153,255,.2);color:var(--accent2)}
-#main-content{flex:1;overflow-y:auto;display:flex;flex-direction:column}
-.page-header{padding:24px 28px 0;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.page-title{font-size:24px;font-weight:800;letter-spacing:-1px}
-.page-sub{font-size:13px;color:var(--text2);margin-top:3px}
-.page-body{padding:20px 28px 32px}
-.table-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--radius2);overflow:hidden}
-table{width:100%;border-collapse:collapse}
-th{background:var(--bg2);padding:11px 16px;text-align:left;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3)}
-td{padding:13px 16px;font-size:14px;border-top:1px solid var(--border)}
-tr:hover td{background:rgba(255,255,255,.02)}
-#modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
-.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius2);padding:28px;width:90%;max-width:560px;max-height:88vh;overflow-y:auto}
-.modal-lg{max-width:820px}
-.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
-.modal-title{font-size:18px;font-weight:700}
-.modal-close{background:var(--bg4);border:1px solid var(--border);color:var(--text2);width:30px;height:30px;border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px}.modal-close:hover{background:var(--danger);color:#fff}
-#login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999}
-.login-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius2);padding:36px;width:100%;max-width:400px}
-.login-logo{text-align:center;margin-bottom:28px}
-.login-mark{width:56px;height:56px;background:var(--accent);border-radius:14px;display:inline-flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;color:#0f1117;margin-bottom:12px}
-.login-title{font-size:28px;font-weight:800;letter-spacing:-1px}
-.login-sub{font-size:13px;color:var(--text2);margin-top:4px}
-.login-error{background:rgba(255,71,87,.1);border:1px solid rgba(255,71,87,.2);color:var(--danger);padding:10px 14px;border-radius:var(--radius);font-size:13px;margin-bottom:14px}
-.tabs{display:flex;gap:4px;background:var(--bg2);padding:4px;border-radius:var(--radius);margin-bottom:20px;width:fit-content}
-.tab{padding:8px 16px;border-radius:7px;cursor:pointer;font-size:13px;font-weight:600;color:var(--text2);transition:.15s}.tab.active{background:var(--bg3);color:var(--text)}
-.progress-bar{height:6px;background:var(--bg4);border-radius:3px;overflow:hidden}
-.progress-fill{height:100%;border-radius:3px;transition:.3s}
-.athlete-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius2);padding:18px;cursor:pointer;transition:.2s}.athlete-card:hover{border-color:var(--accent);transform:translateY(-2px)}
-.exercise-block{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px}
-.ex-number{width:26px;height:26px;background:var(--accent);color:#0f1117;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0}
-.param-pill{background:var(--bg4);border:1px solid var(--border);border-radius:7px;padding:6px 10px;text-align:center;min-width:58px}
-.param-val{font-size:14px;font-weight:700}.param-lbl{font-size:10px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
-#toast{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px}
-.toast-item{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);padding:12px 16px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:10px;min-width:240px;animation:toastIn .3s ease}
-.toast-item.success{border-left:3px solid var(--success)}.toast-item.error{border-left:3px solid var(--danger)}
-@keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
-#athlete-portal{display:flex;flex-direction:column;min-height:100vh}
-.athlete-topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
-.workout-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius2);overflow:hidden;margin-bottom:14px}
-.workout-card-header{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.workout-card-body{padding:16px 18px}
-.ex-row{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}.ex-row:last-child{border-bottom:none}
-.ex-check{width:24px;height:24px;border-radius:6px;border:2px solid var(--border2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;flex-shrink:0;margin-top:2px}.ex-check.done{background:var(--success);border-color:var(--success);color:#fff}
-.rpe-grid{display:flex;gap:6px;flex-wrap:wrap}
-.rpe-btn{width:38px;height:38px;border-radius:8px;border:1px solid var(--border);background:var(--bg4);color:var(--text2);cursor:pointer;font-size:13px;font-weight:600;transition:.2s;display:flex;align-items:center;justify-content:center}.rpe-btn:hover,.rpe-btn.sel{background:var(--accent);border-color:var(--accent);color:#0f1117}
-.day-block{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden}
-.day-block-header{padding:12px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-weight:600;font-size:14px}
-.day-block-body{padding:14px;border-top:1px solid var(--border)}
-.section-title{font-size:13px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
-.divider{border:none;border-top:1px solid var(--border);margin:16px 0}
-.searchbar{position:relative}.searchbar input{padding-left:36px}
-.searchbar-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text3)}
-.empty-state{text-align:center;padding:48px 24px;color:var(--text3)}
-.empty-icon{font-size:48px;margin-bottom:12px;opacity:.5}
-.empty-title{font-size:15px;font-weight:600;color:var(--text2);margin-bottom:6px}
-.spin{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:currentColor;border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-overlay{position:fixed;inset:0;background:rgba(15,17,23,.85);z-index:9998;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px}
-.loading-text{font-size:14px;color:var(--text2)}
-@media(max-width:768px){
-  #sidebar{display:none;position:fixed;height:100vh}.#sidebar.open{display:flex}
-  .grid2,.grid3,.grid4{grid-template-columns:1fr}
-  .page-header,.page-body{padding-left:16px;padding-right:16px}
+html{font-size:16px;height:100%;background:var(--bg)}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);height:100%;overflow:hidden}
+button,input,select,textarea{font-family:'Outfit',sans-serif}
+button{cursor:pointer}
+
+/* ── SCREENS ── */
+.screen{position:fixed;inset:0;display:none;flex-direction:column;background:var(--bg)}
+.screen.show{display:flex}
+
+/* ── NOISE OVERLAY ── */
+.noise{position:fixed;inset:0;pointer-events:none;opacity:.025;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:128px;
 }
+
+/* ── GLOW ORBS ── */
+.orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(80px)}
+.orb1{width:400px;height:400px;background:#6c47ff22;top:-150px;right:-100px}
+.orb2{width:300px;height:300px;background:#10b98114;bottom:-100px;left:-80px}
+
+/* ── LOGIN ── */
+#s-login{align-items:center;justify-content:center;padding:1.5rem;z-index:1}
+.login-wrap{width:100%;max-width:360px;position:relative;z-index:2}
+.logo{font-size:2.4rem;font-weight:800;letter-spacing:-2px;margin-bottom:.25rem}
+.logo-g{color:#fff}.logo-f{color:var(--accent2)}
+.logo-sub{font-size:.8rem;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:2rem}
+.tabs{display:flex;gap:3px;background:var(--bg3);border-radius:var(--r);padding:3px;margin-bottom:1.5rem;border:1px solid var(--border2)}
+.tab{flex:1;padding:.5rem;border:none;background:transparent;color:var(--text3);font-size:.82rem;font-weight:500;border-radius:8px;transition:all .2s}
+.tab.on{background:var(--bg5);color:var(--text);box-shadow:0 1px 4px #0006}
+.field{margin-bottom:.85rem}
+.field label{display:block;font-size:.75rem;color:var(--text2);margin-bottom:.35rem;font-weight:500;letter-spacing:.3px}
+.inp{width:100%;padding:.7rem 1rem;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);color:var(--text);font-size:.9rem;outline:none;transition:border-color .2s}
+.inp:focus{border-color:var(--accent)}
+.inp::placeholder{color:var(--text3)}
+.btn-main{width:100%;padding:.8rem;background:var(--accent);border:none;border-radius:var(--r);color:#fff;font-size:.95rem;font-weight:700;letter-spacing:.3px;transition:all .2s;margin-top:.5rem}
+.btn-main:hover{background:var(--accent2)}
+.btn-main:active{transform:scale(.98)}
+.demo-row{display:flex;gap:6px;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border2)}
+.demo-btn{flex:1;padding:.45rem .3rem;border:1px solid var(--border2);background:var(--bg3);border-radius:8px;color:var(--text2);font-size:.72rem;transition:all .2s}
+.demo-btn:hover{border-color:var(--accent);color:var(--accent2)}
+
+/* ── TOP NAV ── */
+.topnav{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.25rem;background:var(--bg2);border-bottom:1px solid var(--border2);position:relative;z-index:10;flex-shrink:0}
+.nav-logo{font-size:1.15rem;font-weight:800;letter-spacing:-1px}
+.nav-logo span{color:var(--accent2)}
+.nav-right{display:flex;align-items:center;gap:.6rem}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:.2rem .6rem;border-radius:20px;font-size:.7rem;font-weight:700;letter-spacing:.3px;text-transform:uppercase}
+.pill-green{background:var(--greenbg);color:var(--green);border:1px solid #10b98133}
+.pill-yellow{background:var(--yellowbg);color:var(--yellow);border:1px solid #f59e0b33}
+.pill-red{background:var(--redbg);color:var(--red);border:1px solid #ef444433}
+.pill-accent{background:var(--accentbg);color:var(--accent2);border:1px solid #6c47ff44}
+.pill-gray{background:var(--bg4);color:var(--text2);border:1px solid var(--border2)}
+.icon-btn{width:34px;height:34px;border:1px solid var(--border2);background:var(--bg3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9rem;color:var(--text2);transition:all .2s}
+.icon-btn:hover{background:var(--bg4);color:var(--text)}
+.ava{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0}
+
+/* ── SCROLL AREA ── */
+.scroll{flex:1;overflow-y:auto;padding:1.1rem 1.1rem 6rem;position:relative;z-index:1}
+.scroll::-webkit-scrollbar{width:3px}
+.scroll::-webkit-scrollbar-thumb{background:var(--border3);border-radius:2px}
+
+/* ── BOTTOM NAV ── */
+.botnav{display:flex;background:var(--bg2);border-top:1px solid var(--border2);flex-shrink:0;position:relative;z-index:10;padding-bottom:env(safe-area-inset-bottom)}
+.botnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:.55rem .4rem;border:none;background:transparent;color:var(--text3);font-size:.62rem;font-weight:500;position:relative;transition:color .2s}
+.botnav-btn.on{color:var(--accent2)}
+.botnav-btn.on::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:var(--accent);border-radius:0 0 3px 3px}
+.botnav-icon{font-size:1.15rem;line-height:1}
+
+/* ── CARDS ── */
+.card{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r2);padding:1rem;margin-bottom:.7rem}
+.card-title{font-size:.9rem;font-weight:700;margin-bottom:.6rem;letter-spacing:-.2px}
+.card-sub{font-size:.75rem;color:var(--text2);margin-top:.1rem}
+.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.8rem}
+.metric{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r2);padding:.85rem}
+.metric-lbl{font-size:.72rem;color:var(--text2);margin-bottom:.3rem}
+.metric-val{font-size:1.7rem;font-weight:800;letter-spacing:-1px;line-height:1}
+.metric-note{font-size:.68rem;margin-top:.25rem}
+.sec-title{font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:.65rem;letter-spacing:-.1px}
+
+/* ── SEMAFORO BAR ── */
+.sem-bar{height:6px;border-radius:3px;overflow:hidden;display:flex;gap:2px;margin-top:.6rem}
+.sem-g,.sem-y,.sem-r{border-radius:2px}
+.sem-g{background:var(--green)}
+.sem-y{background:var(--yellow)}
+.sem-r{background:var(--red)}
+.sem-nums{display:flex;gap:1.2rem;margin-bottom:.5rem}
+.sem-item{text-align:center}
+.sem-n{font-size:1.2rem;font-weight:800}
+.sem-l{font-size:.65rem;color:var(--text2);margin-top:1px}
+
+/* ── LISTA ALUMNOS ── */
+.a-item{display:flex;align-items:center;gap:.7rem;padding:.75rem;background:var(--bg3);border-radius:var(--r);margin-bottom:.45rem;cursor:pointer;border:1px solid transparent;transition:all .15s;border-left:3px solid transparent}
+.a-item:hover{background:var(--bg4);border-color:var(--border2)}
+.a-item.hl-r{border-left-color:var(--red)}
+.a-item.hl-g{border-left-color:var(--green)}
+.a-item.hl-y{border-left-color:var(--yellow)}
+.a-name{font-size:.88rem;font-weight:600;flex:1}
+.a-meta{font-size:.72rem;color:var(--text2)}
+
+/* ── EJERCICIO CARD (ALUMNO) ── */
+.ej-card{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r2);margin-bottom:.6rem;overflow:hidden;transition:all .2s}
+.ej-card.done{border-color:#10b98133;background:#10b98108}
+.ej-card.active{border-color:#6c47ff55}
+.ej-head{display:flex;align-items:center;gap:.6rem;padding:.85rem;cursor:pointer}
+.ej-num{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;flex-shrink:0;font-family:'JetBrains Mono',monospace}
+.ej-body{padding:0 .85rem .85rem}
+.spec-row{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.65rem}
+.spec{padding:.2rem .55rem;background:var(--bg4);border-radius:6px;font-size:.72rem;color:var(--text2)}
+.rpe-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.3rem;margin-bottom:.6rem}
+.rpe-btn{height:36px;border-radius:8px;border:1px solid var(--border2);background:var(--bg4);color:var(--text2);font-size:.82rem;font-weight:700;transition:all .12s}
+.rpe-btn.sel-g{background:var(--greenbg);border-color:var(--green);color:var(--green)}
+.rpe-btn.sel-y{background:var(--yellowbg);border-color:var(--yellow);color:var(--yellow)}
+.rpe-btn.sel-r{background:var(--redbg);border-color:var(--red);color:var(--red)}
+.carga-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.6rem}
+.carga-inp{flex:1;text-align:center;padding:.55rem;background:var(--bg4);border:1px solid var(--border2);border-radius:var(--r);color:var(--text);font-size:1.1rem;font-weight:700;outline:none;font-family:'JetBrains Mono',monospace}
+.carga-inp:focus{border-color:var(--accent)}
+.pm-btn{width:36px;height:36px;background:var(--bg4);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-size:1.1rem;font-weight:700;flex-shrink:0;transition:all .1s}
+.pm-btn:active{transform:scale(.92)}
+.obs-inp{width:100%;padding:.55rem .7rem;background:var(--bg4);border:1px solid var(--border2);border-radius:var(--r);color:var(--text);font-size:.82rem;resize:none;outline:none;margin-bottom:.6rem}
+.obs-inp:focus{border-color:var(--accent)}
+.obs-inp::placeholder{color:var(--text3)}
+.btn-completar{width:100%;padding:.75rem;background:var(--accent);border:none;border-radius:var(--r);color:#fff;font-size:.9rem;font-weight:700;letter-spacing:.3px;transition:all .2s}
+.btn-completar:hover{background:var(--accent2)}
+.btn-completar:active{transform:scale(.98)}
+.btn-completar:disabled{background:var(--bg5);color:var(--text3);cursor:not-allowed}
+.btn-done{width:100%;padding:.75rem;background:var(--greenbg);border:1px solid #10b98133;border-radius:var(--r);color:var(--green);font-size:.9rem;font-weight:700;cursor:default}
+
+/* ── PROGRESO BAR ── */
+.prog-wrap{height:5px;background:var(--bg4);border-radius:3px;overflow:hidden;margin:.4rem 0 .9rem}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+
+/* ── RUTINA BUILDER ── */
+.ej-builder{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r2);padding:.85rem;margin-bottom:.5rem;position:relative}
+.b-row{display:flex;gap:.4rem;margin-bottom:.4rem;flex-wrap:wrap}
+.b-inp{flex:1;min-width:70px;padding:.5rem .6rem;background:var(--bg4);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-size:.82rem;outline:none}
+.b-inp:focus{border-color:var(--accent)}
+.b-inp::placeholder{color:var(--text3)}
+.btn-add-ej{width:100%;padding:.65rem;border:1px dashed var(--border3);background:transparent;border-radius:var(--r);color:var(--text2);font-size:.82rem;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:.4rem}
+.btn-add-ej:hover{border-color:var(--accent);color:var(--accent2);background:var(--accentbg)}
+.btn-rm{position:absolute;top:.7rem;right:.7rem;width:24px;height:24px;border-radius:6px;border:1px solid var(--border2);background:transparent;color:var(--text3);font-size:.85rem;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.btn-rm:hover{background:var(--redbg);color:var(--red);border-color:#ef444433}
+
+/* ── MODAL ── */
+.modal-bg{position:fixed;inset:0;background:#00000090;z-index:500;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+.modal-bg.show{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border3);border-radius:var(--r3) var(--r3) 0 0;padding:1.35rem 1.1rem;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.modal-bg.show .modal{transform:translateY(0)}
+.modal-handle{width:36px;height:4px;background:var(--border3);border-radius:2px;margin:0 auto 1.1rem}
+.modal-title{font-size:1.05rem;font-weight:700;margin-bottom:1.1rem;letter-spacing:-.2px}
+.m-field{margin-bottom:.85rem}
+.m-field label{display:block;font-size:.75rem;color:var(--text2);margin-bottom:.3rem;font-weight:500}
+select.inp{appearance:none;-webkit-appearance:none}
+
+/* ── TRIAL BANNER ── */
+.trial-banner{background:linear-gradient(135deg,var(--yellowbg),transparent);border:1px solid #f59e0b22;border-radius:var(--r2);padding:.85rem 1rem;display:flex;align-items:center;gap:.7rem;margin-bottom:.8rem}
+.trial-text{flex:1;font-size:.82rem;font-weight:600;color:var(--yellow)}
+.trial-sub{font-size:.72rem;color:var(--text2);font-weight:400;margin-top:1px}
+.btn-sub{padding:.45rem 1rem;background:var(--accent);border:none;border-radius:8px;color:#fff;font-size:.78rem;font-weight:700;white-space:nowrap}
+
+/* ── PAGO BANNER ── */
+.pago-banner{background:linear-gradient(135deg,var(--accentbg),var(--bluebg));border:1px solid #6c47ff22;border-radius:var(--r2);padding:.85rem 1rem;display:flex;align-items:center;gap:.7rem;margin-bottom:.8rem}
+.btn-pagar{padding:.5rem 1rem;background:var(--accent);border:none;border-radius:8px;color:#fff;font-size:.8rem;font-weight:700;white-space:nowrap}
+
+/* ── COMPLETADO ── */
+.comp-wrap{display:flex;flex-direction:column;align-items:center;text-align:center;padding:2rem 1rem}
+.comp-icon{width:72px;height:72px;border-radius:50%;background:var(--greenbg);border:2px solid #10b98133;display:flex;align-items:center;justify-content:center;font-size:2rem;margin-bottom:1rem}
+.comp-title{font-size:1.4rem;font-weight:800;color:var(--green);letter-spacing:-.5px}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;width:100%;margin:1rem 0}
+.stat-box{background:var(--bg3);border-radius:var(--r);padding:.7rem;text-align:center}
+.stat-v{font-size:1.1rem;font-weight:800;letter-spacing:-.5px}
+.stat-l{font-size:.65rem;color:var(--text2);margin-top:2px}
+
+/* ── HISTORIAL ── */
+.week-row{display:flex;gap:3px;margin-bottom:.8rem}
+.day-c{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.day-lbl{font-size:.6rem;color:var(--text2);font-weight:700;text-transform:uppercase}
+.day-dot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700}
+.day-ok{background:var(--greenbg);color:var(--green);border:1px solid #10b98133}
+.day-no{background:var(--redbg);color:var(--red);border:1px solid #ef444433}
+.day-nd{background:var(--bg4);color:var(--text3);border:1px solid var(--border2)}
+
+/* ── PROF CARD (ADMIN) ── */
+.prof-card{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r2);padding:.9rem;margin-bottom:.6rem}
+.prof-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem;margin:.7rem 0}
+.ps{background:var(--bg3);border-radius:8px;padding:.5rem;text-align:center}
+.ps-v{font-size:.95rem;font-weight:800;letter-spacing:-.5px}
+.ps-l{font-size:.65rem;color:var(--text2);margin-top:1px}
+.prof-actions{display:flex;gap:.4rem;flex-wrap:wrap}
+.btn-sm{padding:.3rem .75rem;border-radius:7px;font-size:.75rem;font-weight:600;border:1px solid var(--border2);background:transparent;color:var(--text2);transition:all .12s}
+.btn-sm:hover{background:var(--bg4)}
+.btn-danger{border-color:#ef444433;color:var(--red)}
+.btn-danger:hover{background:var(--redbg)}
+.btn-success{border-color:#10b98133;color:var(--green)}
+.btn-success:hover{background:var(--greenbg)}
+.btn-accent{border-color:#6c47ff44;color:var(--accent2)}
+.btn-accent:hover{background:var(--accentbg)}
+
+/* ── SETTINGS ── */
+.set-lbl{font-size:.72rem;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem}
+.link-prev{background:var(--bg3);border:1px solid #10b98122;border-radius:var(--r);padding:.65rem .85rem;font-size:.78rem;color:var(--green);word-break:break-all;margin-bottom:.5rem}
+
+/* ── REPORTE ── */
+.prog-row{margin-bottom:.65rem}
+.prog-lbl{display:flex;justify-content:space-between;margin-bottom:.25rem}
+.prog-name{font-size:.8rem;font-weight:500}
+.prog-pct{font-size:.8rem;font-weight:700}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:2.5rem 1rem;color:var(--text3)}
+.empty-ico{font-size:2rem;margin-bottom:.6rem}
+.empty-txt{font-size:.85rem}
+
+/* ── TOAST ── */
+.toast{position:fixed;top:5rem;left:50%;transform:translateX(-50%) translateY(-12px);background:var(--bg3);border:1px solid var(--border3);border-radius:var(--r);padding:.65rem 1.1rem;font-size:.82rem;font-weight:600;z-index:9999;opacity:0;transition:all .22s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 32px #00000080}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:#10b98144;color:var(--green)}
+.toast.err{border-color:#ef444444;color:var(--red)}
+.toast.inf{border-color:#6c47ff44;color:var(--accent2)}
+
+/* ── INLINE TABS ── */
+.itabs{display:flex;gap:3px;background:var(--bg3);border-radius:var(--r);padding:3px;margin-bottom:1rem;border:1px solid var(--border2)}
+.itab{flex:1;padding:.4rem;border:none;background:transparent;color:var(--text3);font-size:.76rem;font-weight:600;border-radius:8px;transition:all .15s}
+.itab.on{background:var(--bg5);color:var(--text)}
+
+/* ── DIAS SELECTOR ── */
+.dias-wrap{display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.3rem}
+.dia-btn{padding:.3rem .6rem;border:1px solid var(--border2);background:var(--bg4);border-radius:7px;color:var(--text2);font-size:.78rem;font-weight:700;transition:all .12s}
+.dia-btn.on{background:var(--greenbg);border-color:var(--green);color:var(--green)}
+
+/* ── ANIM ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp .3s ease forwards}
 </style>
 </head>
 <body>
-<div id="toast"></div>
+<div class="noise"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="toast" id="toast"></div>
 
-<!-- LOGIN -->
-<div id="login-screen">
-  <div class="login-box">
-    <div class="login-logo">
-      <div class="login-mark">T</div>
-      <div class="login-title">TrainOS</div>
-      <div class="login-sub">Plataforma de entrenamiento deportivo</div>
+<!-- ═══════════════════════════════════════
+     LOGIN
+═══════════════════════════════════════ -->
+<div class="screen show" id="s-login">
+  <div class="login-wrap fade-up">
+    <div class="logo"><span class="logo-g">Gym</span><span class="logo-f">Flow</span></div>
+    <div class="logo-sub">Plataforma de entrenamiento</div>
+    <div class="tabs">
+      <button class="tab on" onclick="setLoginTab('prof')">Profesor</button>
+      <button class="tab" onclick="setLoginTab('reg')">Registrarse</button>
+      <button class="tab" onclick="setLoginTab('alum')">Alumno</button>
     </div>
-    <div id="login-error" class="login-error hidden"></div>
-    <div class="form-group"><label>Usuario</label><input type="text" id="login-email" placeholder="nombre apellido" autocomplete="username" style="text-transform:lowercase" oninput="this.value=this.value.toLowerCase()"></div>
-    <div class="form-group"><label>Contraseña</label>
-    <div style="position:relative">
-      <input type="password" id="login-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()" style="padding-right:42px">
-      <button type="button" onclick="togglePw()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text3);padding:4px" title="Ver contraseña">
-        <svg id="pw-eye" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-      </button>
-    </div></div>
-    <button class="btn btn-primary fw" id="login-btn" onclick="doLogin()" style="margin-top:8px">Ingresar</button>
-    <div style="margin-top:20px;text-align:center;font-size:11px;color:var(--text3)">App desarrollada por <strong style="color:var(--text2)">MSc. Claudio Rojas H.</strong></div>
-</div>
+
+    <!-- Login Profesor -->
+    <div id="lt-prof">
+      <div class="field"><label>Correo</label><input class="inp" id="l-email" type="email" placeholder="tu@correo.com" value="prof@gym.cl"></div>
+      <div class="field"><label>Contraseña</label><input class="inp" id="l-pass" type="password" placeholder="••••••••" value="123456"></div>
+      <button class="btn-main" onclick="loginProf()">Ingresar</button>
+    </div>
+    <!-- Registro -->
+    <div id="lt-reg" style="display:none">
+      <div class="field"><label>Tu nombre</label><input class="inp" id="r-nombre" placeholder="Ej: Carlos Rojas"></div>
+      <div class="field"><label>Nombre del gimnasio</label><input class="inp" id="r-gym" placeholder="Ej: CrossFit Norte"></div>
+      <div class="field"><label>Correo</label><input class="inp" id="r-email" type="email" placeholder="tu@correo.com"></div>
+      <div class="field"><label>Contraseña</label><input class="inp" id="r-pass" type="password" placeholder="Min. 6 caracteres"></div>
+      <div style="font-size:.75rem;color:var(--green);margin-bottom:.75rem">✓ 14 días gratis · sin tarjeta</div>
+      <button class="btn-main" onclick="registro()">Crear cuenta gratis</button>
+    </div>
+    <!-- Login Alumno -->
+    <div id="lt-alum" style="display:none">
+      <div style="font-size:.75rem;color:var(--text2);margin-bottom:.75rem">Tu profesor te dio un código de acceso</div>
+      <div class="field"><label>Código de acceso</label><input class="inp" id="a-code" placeholder="Ej: matias2026" value="alumno123"></div>
+      <button class="btn-main" onclick="loginAlumno()">Entrar a mi rutina</button>
+    </div>
+
+    <div class="demo-row">
+      <button class="demo-btn" onclick="demoLogin('admin')">👑 Admin</button>
+      <button class="demo-btn" onclick="demoLogin('prof')">🏋 Profesor</button>
+      <button class="demo-btn" onclick="demoLogin('alumno')">🧑 Alumno</button>
+    </div>
+  </div>
 </div>
 
-<!-- APP ENTRENADOR -->
-<div id="app-shell" class="hidden">
-  <nav id="sidebar">
-    <div class="sidebar-logo">
-      <div class="logo-mark">T</div>
-      <div><div class="logo-text">TrainOS</div><div style="font-size:10px;color:var(--text3);letter-spacing:1px">PRO</div></div>
-    </div>
-    <div class="sidebar-section">Principal</div>
-    <div class="nav-item active" onclick="navTo('dashboard')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</div>
-    <div class="nav-item" onclick="navTo('athletes')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Deportistas</div>
-    <div class="nav-item" onclick="navTo('routines')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Rutinas</div>
-    <div class="nav-item" onclick="navTo('exercises')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Ejercicios</div>
-    <div class="sidebar-section">Seguimiento</div>
-    <div class="nav-item" onclick="navTo('compliance')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Cumplimiento</div>
-    <div class="sidebar-footer">
-      <div class="user-pill">
-        <div class="avatar avatar-green" id="sidebar-avatar">C</div>
-        <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="sidebar-name">Coach</div><div style="font-size:11px;color:var(--text3)">Entrenador</div></div>
-        <button class="btn-icon btn-sm" onclick="doLogout()" title="Salir"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
-      </div>
+<!-- ═══════════════════════════════════════
+     ADMIN
+═══════════════════════════════════════ -->
+<div class="screen" id="s-admin">
+  <nav class="topnav">
+    <div class="nav-logo">Gym<span>Flow</span></div>
+    <div class="nav-right">
+      <span class="pill pill-accent">👑 Admin</span>
+      <button class="icon-btn" onclick="logout()">⎋</button>
     </div>
   </nav>
-  <div id="main-content">
-    <div id="page-dashboard" class="hidden">
-      <div class="page-header">
-        <div><div class="page-title" id="dash-greeting">¡Bienvenido!</div><div class="page-sub" id="dash-date"></div></div>
-        <button class="btn btn-primary" onclick="navTo('routines');setTimeout(openNewRoutineModal,200)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nueva rutina</button>
+  <div class="scroll" id="admin-scroll">
+    <div class="metric-grid">
+      <div class="metric"><div class="metric-lbl">Profesores activos</div><div class="metric-val" style="color:var(--green)" id="adm-activos">0</div><div class="metric-note" style="color:var(--green)">pagando</div></div>
+      <div class="metric"><div class="metric-lbl">En trial</div><div class="metric-val" style="color:var(--yellow)" id="adm-trial">0</div><div class="metric-note" style="color:var(--text2)">14 días gratis</div></div>
+      <div class="metric"><div class="metric-lbl">Suspendidos</div><div class="metric-val" style="color:var(--red)" id="adm-susp">0</div><div class="metric-note" style="color:var(--red)">sin pago</div></div>
+      <div class="metric"><div class="metric-lbl">Total alumnos</div><div class="metric-val" id="adm-alumnos">0</div><div class="metric-note" style="color:var(--text2)">en plataforma</div></div>
+    </div>
+    <div class="sec-title">Planes · lo que cobras tú</div>
+    <div class="card" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;padding:.75rem">
+      <div style="text-align:center;padding:.5rem;background:var(--bg3);border-radius:var(--r)">
+        <div style="font-size:.65rem;color:var(--text2);text-transform:uppercase;font-weight:700;margin-bottom:3px">Básico</div>
+        <div style="font-weight:800;font-size:.95rem">$9.990</div>
+        <div style="font-size:.65rem;color:var(--text3)">hasta 20 alumnos</div>
       </div>
-      <div class="page-body">
-        <div class="grid4" id="dash-stats"></div>
-        <div class="grid2 mt24">
-          <div><div class="section-title">Deportistas activos</div><div id="dash-athletes"></div></div>
-          <div><div class="section-title">Rutinas recientes</div><div id="dash-routines"></div></div>
+      <div style="text-align:center;padding:.5rem;background:var(--accentbg);border-radius:var(--r);border:1px solid #6c47ff33">
+        <div style="font-size:.65rem;color:var(--accent2);text-transform:uppercase;font-weight:700;margin-bottom:3px">Pro ⭐</div>
+        <div style="font-weight:800;font-size:.95rem;color:var(--accent2)">$19.990</div>
+        <div style="font-size:.65rem;color:var(--text3)">hasta 60 alumnos</div>
+      </div>
+      <div style="text-align:center;padding:.5rem;background:var(--bg3);border-radius:var(--r)">
+        <div style="font-size:.65rem;color:var(--text2);text-transform:uppercase;font-weight:700;margin-bottom:3px">Ilimit.</div>
+        <div style="font-weight:800;font-size:.95rem">$34.990</div>
+        <div style="font-size:.65rem;color:var(--text3)">sin límite</div>
+      </div>
+    </div>
+    <div class="sec-title">Profesores registrados</div>
+    <div id="adm-profs-list"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PROFESOR
+═══════════════════════════════════════ -->
+<div class="screen" id="s-prof">
+  <nav class="topnav">
+    <div class="nav-logo">Gym<span>Flow</span></div>
+    <div class="nav-right">
+      <span class="pill" id="prof-badge">TRIAL</span>
+      <button class="icon-btn" onclick="logout()">⎋</button>
+    </div>
+  </nav>
+  <div class="itabs" style="margin:.7rem .7rem 0;flex-shrink:0" id="prof-itabs">
+    <button class="itab on" onclick="showPTab('inicio')">Inicio</button>
+    <button class="itab" onclick="showPTab('alumnos')">Alumnos</button>
+    <button class="itab" onclick="showPTab('rutinas')">Rutinas</button>
+    <button class="itab" onclick="showPTab('reportes')">Reportes</button>
+    <button class="itab" onclick="showPTab('config')">Config</button>
+  </div>
+  <div class="scroll" id="prof-scroll">
+
+    <!-- INICIO -->
+    <div id="pt-inicio">
+      <div class="trial-banner" id="trial-banner">
+        <span style="font-size:1.3rem">⏳</span>
+        <div class="flex-1"><div class="trial-text" id="trial-text">Trial: 14 días restantes</div><div class="trial-sub">Agrega tu tarjeta para no perder el acceso</div></div>
+        <button class="btn-sub" onclick="suscribirse()">Suscribirme</button>
+      </div>
+      <div class="metric-grid">
+        <div class="metric"><div class="metric-lbl">Alumnos activos</div><div class="metric-val" id="p-activos" style="color:var(--text)">0</div><div class="metric-note" style="color:var(--text2)" id="p-activos-note"></div></div>
+        <div class="metric"><div class="metric-lbl">Cumplimiento sem.</div><div class="metric-val" id="p-cump">—%</div><div class="metric-note" style="color:var(--text2)">últimos 7 días</div></div>
+        <div class="metric"><div class="metric-lbl">RPE prom. hoy</div><div class="metric-val" id="p-rpe">—</div><div class="metric-note" id="p-rpe-note" style="color:var(--text2)">sin registros</div></div>
+        <div class="metric"><div class="metric-lbl">Sin registrar hoy</div><div class="metric-val" id="p-sinreg" style="color:var(--red)">0</div><div class="metric-note" style="color:var(--text2)">con asignación</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Semáforo de carga — hoy</div>
+        <div class="sem-nums" id="sem-nums">
+          <div class="sem-item"><div class="sem-n" style="color:var(--green)" id="sem-g">0</div><div class="sem-l">Normal ≤6.5</div></div>
+          <div class="sem-item"><div class="sem-n" style="color:var(--yellow)" id="sem-y">0</div><div class="sem-l">Moderado 6.6–8</div></div>
+          <div class="sem-item"><div class="sem-n" style="color:var(--red)" id="sem-r">0</div><div class="sem-l">Alto &gt;8</div></div>
         </div>
-        <div class="mt24"><div class="section-title">Cumplimiento</div><div id="dash-compliance"></div></div>
+        <div class="sem-bar" id="sem-bar"><div style="flex:1;background:var(--bg4);border-radius:3px"></div></div>
+      </div>
+      <div class="sec-title" id="alertas-title" style="display:none">🔴 Alertas RPE alto</div>
+      <div id="alertas-list"></div>
+      <div class="sec-title">Accesos rápidos</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+        <button class="a-item" style="cursor:pointer;border-radius:var(--r)" onclick="showPTab('alumnos');openModal('m-nuevo-alumno')"><span>👤</span><span class="a-name">+ Nuevo alumno</span></button>
+        <button class="a-item" style="cursor:pointer;border-radius:var(--r)" onclick="showPTab('rutinas');openModal('m-nueva-rutina')"><span>📋</span><span class="a-name">+ Nueva rutina</span></button>
+        <button class="a-item" style="cursor:pointer;border-radius:var(--r)" onclick="showPTab('reportes')"><span>📊</span><span class="a-name">Ver reportes</span></button>
+        <button class="a-item" style="cursor:pointer;border-radius:var(--r)" onclick="showPTab('config')"><span>⚙️</span><span class="a-name">Configuración</span></button>
       </div>
     </div>
-    <div id="page-athletes" class="hidden">
-      <div class="page-header">
-        <div><div class="page-title">Deportistas</div><div class="page-sub" id="athletes-count"></div></div>
-        <button class="btn btn-primary" onclick="openAthleteModal()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nuevo deportista</button>
+
+    <!-- ALUMNOS -->
+    <div id="pt-alumnos" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem">
+        <div class="sec-title" style="margin:0" id="alumnos-count">Mis alumnos</div>
+        <button class="btn-sm btn-accent" onclick="openModal('m-nuevo-alumno')">+ Alumno</button>
       </div>
-      <div class="page-body">
-        <div class="searchbar" style="margin-bottom:16px"><span class="searchbar-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><input type="text" id="athlete-search" placeholder="Buscar deportista..." oninput="renderAthletes()"></div>
-        <div id="athletes-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px"></div>
+      <div id="prof-alumnos-list"></div>
+    </div>
+
+    <!-- RUTINAS -->
+    <div id="pt-rutinas" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem">
+        <div class="sec-title" style="margin:0" id="rutinas-count">Mis rutinas</div>
+        <button class="btn-sm btn-accent" onclick="openModal('m-nueva-rutina')">+ Rutina</button>
+      </div>
+      <div id="prof-rutinas-list"></div>
+    </div>
+
+    <!-- REPORTES -->
+    <div id="pt-reportes" style="display:none">
+      <div class="sec-title">Cumplimiento semanal</div>
+      <div class="card">
+        <div class="card-title" style="margin-bottom:.6rem">Por día</div>
+        <div class="week-row" id="rep-week"></div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="margin-bottom:.75rem">Por alumno</div>
+        <div id="rep-alumnos"></div>
       </div>
     </div>
-    <div id="page-routines" class="hidden">
-      <div class="page-header">
-        <div><div class="page-title">Rutinas</div><div class="page-sub" id="routines-count"></div></div>
-        <button class="btn btn-primary" onclick="openNewRoutineModal()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Crear rutina</button>
+
+    <!-- CONFIG -->
+    <div id="pt-config" style="display:none">
+      <div class="sec-title">Mi gimnasio</div>
+      <div class="card">
+        <div class="m-field"><div class="set-lbl">Nombre del gym</div><input class="inp" id="cfg-gym" placeholder="CrossFit Norte"></div>
+        <div class="m-field"><div class="set-lbl">Mi nombre</div><input class="inp" id="cfg-nombre" placeholder="Carlos Rojas"></div>
+        <button class="btn-main" onclick="guardarConfig()">Guardar</button>
       </div>
-      <div class="page-body"><div id="routines-list"></div></div>
-    </div>
-    <div id="page-exercises" class="hidden">
-      <div class="page-header">
-        <div><div class="page-title">Ejercicios</div><div class="page-sub" id="exercises-count"></div></div>
-        <button class="btn btn-primary" onclick="openExerciseModal()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nuevo ejercicio</button>
+      <div class="sec-title" style="margin-top:.5rem">💳 Link de pago para tus alumnos</div>
+      <div class="card">
+        <div class="m-field"><div class="set-lbl">Link Mercado Pago</div><input class="inp" id="cfg-mp" placeholder="https://mpago.la/tu-link" oninput="updateLinkPreview()"></div>
+        <div class="m-field"><div class="set-lbl">Precio mensual</div><input class="inp" id="cfg-precio" placeholder="$15.000 CLP / mes"></div>
+        <div class="m-field"><div class="set-lbl">Mensaje para alumnos</div><textarea class="inp" id="cfg-msg" rows="2" placeholder="Paga aquí tu membresía mensual" style="resize:none"></textarea></div>
+        <div class="set-lbl">Vista previa</div>
+        <div class="link-prev" id="link-prev-text">—</div>
+        <button class="btn-main" onclick="guardarConfig()">Guardar configuración</button>
       </div>
-      <div class="page-body">
-        <div class="flex gap8" style="margin-bottom:16px;flex-wrap:wrap">
-          <div class="searchbar" style="flex:1;min-width:200px"><span class="searchbar-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><input type="text" id="ex-search" placeholder="Buscar..." oninput="renderExercises()"></div>
-          <select id="ex-filter-cat" onchange="renderExercises()" style="width:auto"><option value="">Todas las categorías</option><option>Fuerza</option><option>Potencia</option><option>Movilidad</option><option>Core</option><option>Resistencia</option><option>Técnica</option></select>
+      <div class="sec-title" style="margin-top:.5rem">Mi suscripción GymFlow</div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-weight:700;font-size:.9rem">Plan Pro</div><div class="card-sub">Hasta 60 alumnos · $19.990/mes</div></div>
+          <span class="pill pill-yellow">TRIAL</span>
         </div>
-        <div id="exercises-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px"></div>
+        <div style="height:4px;background:var(--bg4);border-radius:2px;margin:.7rem 0;overflow:hidden"><div style="width:30%;height:100%;background:linear-gradient(90deg,var(--yellow),#f59e0b88);border-radius:2px"></div></div>
+        <div style="font-size:.78rem;color:var(--text2);margin-bottom:.7rem">14 días de prueba restantes</div>
+        <button class="btn-main" onclick="suscribirse()">Suscribirme — $19.990/mes</button>
       </div>
     </div>
-    <div id="page-compliance" class="hidden">
-      <div class="page-header"><div><div class="page-title">Cumplimiento</div><div class="page-sub">Seguimiento de sesiones</div></div></div>
-      <div class="page-body"><div id="compliance-content"></div></div>
-    </div>
-    <div style="padding:8px 16px;text-align:center;font-size:10px;color:var(--text3)">MSc. Claudio Rojas H.</div>
+
   </div>
 </div>
 
-<!-- PORTAL DEPORTISTA -->
-<div id="athlete-portal" class="hidden">
-  <div class="athlete-topbar">
-    <div class="flex ac gap8"><div class="logo-mark" style="width:28px;height:28px;font-size:14px">T</div><span style="font-size:16px;font-weight:700">TrainOS</span></div>
-    <div class="flex ac gap8"><div class="avatar avatar-blue" id="ath-avatar">A</div><span style="font-size:13px;color:var(--text2)" id="ath-name-top"></span><button class="btn btn-secondary btn-sm" onclick="doLogout()">Salir</button></div>
-  </div>
-  <div style="padding:20px;max-width:720px;margin:0 auto">
-    <div class="tabs">
-      <div class="tab active" onclick="athTab('today',this)">Hoy</div>
-      <div class="tab" onclick="athTab('history',this)">Historial</div>
-      <div class="tab" onclick="athTab('profile',this)">Mi perfil</div>
+<!-- ═══════════════════════════════════════
+     ALUMNO
+═══════════════════════════════════════ -->
+<div class="screen" id="s-alumno">
+  <nav class="topnav">
+    <div class="nav-logo">Gym<span>Flow</span></div>
+    <div class="nav-right">
+      <div class="ava" id="alum-ava" style="background:var(--accentbg);color:var(--accent2)">MM</div>
+      <button class="icon-btn" onclick="logout()">⎋</button>
     </div>
-    <div id="ath-today"></div>
-    <div id="ath-history" class="hidden"></div>
-    <div id="ath-profile" class="hidden"></div>
+  </nav>
+  <div class="scroll" id="alum-scroll">
+    <div id="alum-main"></div>
+  </div>
+  <nav class="botnav">
+    <button class="botnav-btn on" id="abt-hoy" onclick="alumTab('hoy')"><span class="botnav-icon">🏋️</span>Hoy</button>
+    <button class="botnav-btn" id="abt-hist" onclick="alumTab('hist')"><span class="botnav-icon">📊</span>Historial</button>
+    <button class="botnav-btn" id="abt-perf" onclick="alumTab('perf')"><span class="botnav-icon">👤</span>Perfil</button>
+  </nav>
+</div>
+
+<!-- ═══════════════════════════════════════
+     MODALES
+═══════════════════════════════════════ -->
+<div class="modal-bg" id="m-nuevo-alumno" onclick="closeMOutside(event,'m-nuevo-alumno')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Agregar alumno</div>
+    <div class="m-field"><label>Nombre completo</label><input class="inp" id="na-nombre" placeholder="Matías Moreno"></div>
+    <div class="m-field"><label>Edad</label><input class="inp" id="na-edad" type="number" placeholder="17"></div>
+    <div class="m-field"><label>Nivel</label>
+      <select class="inp" id="na-nivel"><option>Básico</option><option>Intermedio</option><option selected>Avanzado</option></select></div>
+    <div class="m-field"><label>Grupo / disciplina</label><input class="inp" id="na-grupo" placeholder="Halterofilia Juvenil"></div>
+    <div class="m-field"><label>Código de acceso (login)</label><input class="inp" id="na-codigo" placeholder="matias2026"></div>
+    <div class="m-field"><label>Observaciones</label><textarea class="inp" id="na-obs" rows="2" placeholder="Lesiones, notas..." style="resize:none"></textarea></div>
+    <button class="btn-main" onclick="agregarAlumno()">Agregar alumno</button>
   </div>
 </div>
 
-<!-- MODAL -->
-<div id="modal-overlay" class="hidden" onclick="closeModalOnBg(event)">
-  <div class="modal" id="modal-box">
-    <div class="modal-header"><div class="modal-title" id="modal-title"></div><button class="modal-close" onclick="closeModal()">✕</button></div>
-    <div id="modal-body"></div>
+<div class="modal-bg" id="m-nueva-rutina" onclick="closeMOutside(event,'m-nueva-rutina')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Crear rutina</div>
+    <div class="m-field"><label>Nombre de la sesión</label><input class="inp" id="nr-nombre" placeholder="Fuerza inferior — Martes"></div>
+    <div class="m-field"><label>Días de la semana</label>
+      <div class="dias-wrap" id="dias-wrap">
+        <button class="dia-btn" onclick="toggleDia(this)">L</button>
+        <button class="dia-btn on" onclick="toggleDia(this)">M</button>
+        <button class="dia-btn" onclick="toggleDia(this)">X</button>
+        <button class="dia-btn" onclick="toggleDia(this)">J</button>
+        <button class="dia-btn on" onclick="toggleDia(this)">V</button>
+        <button class="dia-btn" onclick="toggleDia(this)">S</button>
+        <button class="dia-btn" onclick="toggleDia(this)">D</button>
+      </div>
+    </div>
+    <div style="font-size:.75rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.4rem">Ejercicios</div>
+    <div id="ej-builder-list">
+      <div class="ej-builder">
+        <button class="btn-rm" onclick="rmEj(this)">×</button>
+        <div class="b-row"><input class="b-inp" style="flex:2" placeholder="Nombre del ejercicio"></div>
+        <div class="b-row">
+          <input class="b-inp" placeholder="Series" type="number">
+          <input class="b-inp" placeholder="Reps" type="number">
+          <input class="b-inp" placeholder="RPE obj." type="number" step="0.5">
+          <input class="b-inp" placeholder="Desc.seg" type="number">
+        </div>
+        <div class="b-row"><input class="b-inp" style="flex:1" placeholder="Obs. técnica (opcional)"></div>
+      </div>
+    </div>
+    <button class="btn-add-ej" onclick="addEj()">+ Ejercicio</button>
+    <div style="margin:.75rem 0"></div>
+    <div class="m-field"><label>Asignar a</label>
+      <select class="inp" id="nr-asignar"><option value="todos">Todos los alumnos</option></select>
+    </div>
+    <button class="btn-main" style="margin-top:.5rem" onclick="crearRutina()">Crear rutina</button>
   </div>
 </div>
 
-<script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getFirestore, collection, doc, getDocs, getDoc, addDoc, updateDoc, deleteDoc, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCK03LZwSRIt_ghBO6GiqKq_o7_0wI1xJk",
-  authDomain: "trainos-4a3d2.firebaseapp.com",
-  projectId: "trainos-4a3d2",
-  storageBucket: "trainos-4a3d2.firebasestorage.app",
-  messagingSenderId: "640434413464",
-  appId: "1:640434413464:web:f1fe4a492c34833a3f55ed"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// ── HELPERS ──────────────────────────────────────────
-const ge = id => document.getElementById(id);
-const showToast = (msg, type='success') => {
-  const item = document.createElement('div');
-  item.className = `toast-item ${type}`;
-  item.textContent = msg;
-  ge('toast').appendChild(item);
-  setTimeout(() => item.remove(), 3500);
-};
-const showLoading = on => {
-  let el = ge('loading-overlay');
-  if(on){ if(!el){ el=document.createElement('div'); el.id='loading-overlay'; el.className='loading-overlay'; el.innerHTML='<div class="spin" style="width:36px;height:36px;border-width:3px;border-top-color:var(--accent)"></div><div class="loading-text">Cargando...</div>'; document.body.appendChild(el); } }
-  else { if(el) el.remove(); }
-};
-const openModal = (title, body, lg) => {
-  ge('modal-title').textContent = title;
-  ge('modal-body').innerHTML = body;
-  if(lg) ge('modal-box').classList.add('modal-lg');
-  ge('modal-overlay').classList.remove('hidden');
-};
-const closeModal = () => { ge('modal-overlay').classList.add('hidden'); ge('modal-box').classList.remove('modal-lg'); ge('modal-body').innerHTML=''; };
-window.closeModal = closeModal;
-window.closeModalOnBg = e => { if(e.target===ge('modal-overlay')) closeModal(); };
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
-
-// ── FIRESTORE CRUD ───────────────────────────────────
-const getAll = async col => { const snap = await getDocs(collection(db,col)); return snap.docs.map(d=>({id:d.id,...d.data()})); };
-const getFiltered = async (col, field, val) => { const q2 = query(collection(db,col), where(field,'==',val)); const snap = await getDocs(q2); return snap.docs.map(d=>({id:d.id,...d.data()})); };
-const addDoc2 = async (col, data) => { const ref = await addDoc(collection(db,col), {...data, createdAt: Date.now()}); return {id:ref.id,...data}; };
-const updateDoc2 = async (col, id, data) => { await updateDoc(doc(db,col,id), data); };
-const deleteDoc2 = async (col, id) => { await deleteDoc(doc(db,col,id)); };
-
-// ── STATE ────────────────────────────────────────────
-let currentUser = null, currentAthlete = null;
-let cache = { athletes:[], exercises:[], routines:[], logs:[] };
-let builderDays = [], builderCurrentDay = 0, selectedRpe = null;
-
-// ── AUTH ─────────────────────────────────────────────
-window.togglePw = () => {
-  const inp = ge('login-password');
-  const show = inp.type === 'password';
-  inp.type = show ? 'text' : 'password';
-  ge('pw-eye').style.opacity = show ? '1' : '0.4';
-};
-window.doLogin = async () => {
-  const username = ge('login-email').value.trim().toLowerCase();
-  const pw = ge('login-password').value;
-  if(!username||!pw){ showError('Completa todos los campos'); return; }
-  const btn = ge('login-btn');
-  btn.disabled=true; btn.innerHTML='<span class="spin"></span> Ingresando...';
-  try {
-    const users = await getFiltered('users','username',username);
-    const u = users.find(x=>x.password===pw);
-    if(!u){ showError('Correo o contraseña incorrectos'); return; }
-    currentUser = u;
-    localStorage.setItem('trainos_uid', u.id);
-    ge('login-screen').classList.add('hidden');
-    if(u.role==='coach') await initCoach();
-    else await initAthlete();
-  } catch(e){ showError('Error de conexión: '+e.message); console.error(e); }
-  finally { btn.disabled=false; btn.innerHTML='Ingresar'; }
-};
-const showError = msg => { const el=ge('login-error'); el.textContent=msg; el.classList.remove('hidden'); };
-
-window.doLogout = () => { localStorage.removeItem('trainos_uid'); location.reload(); };
-
-// Auto-login
-(async () => {
-  const uid = localStorage.getItem('trainos_uid');
-  if(!uid) return;
-  try {
-    const snap = await getDoc(doc(db,'users',uid));
-    if(!snap.exists()) return;
-    currentUser = {id:snap.id,...snap.data()};
-    ge('login-screen').classList.add('hidden');
-    if(currentUser.role==='coach') await initCoach();
-    else await initAthlete();
-  } catch(e){ console.error(e); }
-})();
-
-// ── COACH ────────────────────────────────────────────
-async function initCoach(){
-  showLoading(true);
-  try {
-    const [athletes,exercises,routines,logs] = await Promise.all([getAll('athletes'),getAll('exercises'),getAll('routines'),getAll('logs')]);
-    cache = {athletes, exercises, routines, logs};
-  } finally { showLoading(false); }
-  ge('app-shell').classList.remove('hidden');
-  ge('sidebar-name').textContent = currentUser.name;
-  ge('sidebar-avatar').textContent = currentUser.name[0];
-  navTo('dashboard');
-}
-
-let currentPage = 'dashboard';
-window.navTo = page => {
-  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
-  const navEl = document.querySelector(`.nav-item[onclick*="'${page}'"]`);
-  if(navEl) navEl.classList.add('active');
-  document.querySelectorAll('[id^="page-"]').forEach(el=>el.classList.add('hidden'));
-  const pg = ge('page-'+page); if(pg) pg.classList.remove('hidden');
-  currentPage = page;
-  ({dashboard:renderDashboard,athletes:renderAthletes,routines:renderRoutines,exercises:renderExercises,compliance:renderCompliance})[page]?.();
-};
-
-// ── DASHBOARD ────────────────────────────────────────
-function renderDashboard(){
-  const now = new Date(), h = now.getHours();
-  ge('dash-greeting').textContent = (h<12?'¡Buenos días, ':h<18?'¡Buenas tardes, ':'¡Buenas noches, ')+currentUser.name.split(' ')[0]+'!';
-  ge('dash-date').textContent = now.toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-  const active = cache.athletes.filter(a=>a.active);
-  ge('dash-stats').innerHTML=`
-    <div class="stat-card accent"><div class="stat-lbl">Deportistas activos</div><div class="stat-val">${active.length}</div></div>
-    <div class="stat-card blue"><div class="stat-lbl">Rutinas creadas</div><div class="stat-val">${cache.routines.length}</div></div>
-    <div class="stat-card green"><div class="stat-lbl">Sesiones registradas</div><div class="stat-val">${cache.logs.length}</div></div>
-    <div class="stat-card warn"><div class="stat-lbl">Ejercicios</div><div class="stat-val">${cache.exercises.length}</div></div>`;
-  ge('dash-athletes').innerHTML = active.slice(0,5).map(a=>`<div class="card-sm flex ac gap8 mt8" style="cursor:pointer" onclick="openAthleteDetail('${a.id}')"><div class="avatar avatar-green">${a.name[0]}</div><div style="flex:1"><div style="font-size:14px;font-weight:600">${a.name}</div><div style="font-size:12px;color:var(--text2)">${a.sport||''}</div></div><span class="badge badge-green">Activo</span></div>`).join('')||'<div class="empty-state"><div class="empty-title">Sin deportistas</div></div>';
-  ge('dash-routines').innerHTML = cache.routines.slice(0,4).map(r=>`<div class="card-sm mt8"><div style="font-size:14px;font-weight:600">${r.name}</div><div style="font-size:12px;color:var(--text2);margin-top:4px">${(r.assignedTo||[]).length} atleta(s) · ${(r.days||[]).length} día(s)</div></div>`).join('')||'<div class="empty-state"><div class="empty-title">Sin rutinas</div></div>';
-  ge('dash-compliance').innerHTML = active.map(a=>{
-    const al=cache.logs.filter(l=>l.athleteId===a.id), done=al.filter(l=>l.status==='completed').length, pct=al.length?Math.round(done/al.length*100):0, col=pct>=70?'var(--success)':pct>=40?'var(--warn)':'var(--danger)';
-    return `<div class="card-sm flex ac gap12 mt8"><div class="avatar avatar-green" style="flex-shrink:0">${a.name[0]}</div><div style="flex:1"><div class="flex ac jb" style="margin-bottom:4px"><span style="font-size:13px;font-weight:600">${a.name}</span><span style="font-size:12px;color:var(--text2)">${done}/${al.length}</span></div><div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${col}"></div></div></div><span style="font-size:14px;font-weight:700;color:${col}">${pct}%</span></div>`;
-  }).join('')||'<div class="empty-state"><div class="empty-title">Sin datos</div></div>';
-}
-
-// ── ATHLETES ─────────────────────────────────────────
-function renderAthletes(){
-  const q = (ge('athlete-search')||{}).value||'';
-  const filtered = cache.athletes.filter(a=>a.name.toLowerCase().includes(q.toLowerCase())||(a.sport||'').toLowerCase().includes(q.toLowerCase()));
-  ge('athletes-count').textContent = `${cache.athletes.length} deportistas registrados`;
-  const grid = ge('athletes-grid');
-  if(!filtered.length){ grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🏃</div><div class="empty-title">No encontrado</div></div>`; return; }
-  grid.innerHTML = filtered.map(a=>`<div class="athlete-card" onclick="openAthleteDetail('${a.id}')">
-    <div class="flex ac jb" style="margin-bottom:12px"><div class="avatar avatar-${a.active?'green':'blue'}" style="width:40px;height:40px;font-size:16px">${a.name[0]}</div><span class="badge ${a.active?'badge-green':'badge-warn'}">${a.active?'Activo':'Inactivo'}</span></div>
-    <div style="font-size:16px;font-weight:700;margin-bottom:4px">${a.name}</div>
-    <div style="font-size:12px;color:var(--text2);margin-bottom:12px">${a.sport||''} · ${a.category||''} · ${a.level||''}</div>
-    <div style="font-size:12px;color:var(--text3);border-top:1px solid var(--border);padding-top:10px">${a.goal||'Sin objetivo'}</div>
-    <div class="flex gap8 mt12">
-      <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation();openAthleteModal('${a.id}')">Editar</button>
-      <button class="btn btn-blue btn-sm" onclick="event.stopPropagation();openAssignModal('${a.id}',null)">Asignar rutina</button>
+<div class="modal-bg" id="m-asignar" onclick="closeMOutside(event,'m-asignar')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="m-asignar-title">Asignar rutina</div>
+    <div class="m-field"><label>Asignar a</label>
+      <select class="inp" id="as-alumnos"><option value="todos">Todos los alumnos</option></select>
     </div>
-  </div>`).join('');
-}
-window.renderAthletes = renderAthletes;
-
-window.openAthleteModal = async (id) => {
-  const a = id ? cache.athletes.find(x=>x.id===id) : null;
-  openModal(a?`Editar: ${a.name}`:'Nuevo deportista',`
-    <div class="grid2">
-      <div class="form-group" style="grid-column:1/-1"><label>Nombre completo *</label><input id="fm-name" value="${a?a.name:''}" placeholder="Nombre Apellido"></div>
-      <div class="form-group"><label>Fecha de nacimiento</label><input type="date" id="fm-dob" value="${a?a.dob||'':''}"></div>
-      <div class="form-group"><label>Deporte</label><input id="fm-sport" value="${a?a.sport||'':''}" placeholder="Halterofilia..."></div>
-      <div class="form-group"><label>Categoría</label><select id="fm-cat">${['Infantil','Juvenil','Adulto','Master'].map(c=>`<option ${a&&a.category===c?'selected':''}>${c}</option>`).join('')}</select></div>
-      <div class="form-group"><label>Nivel</label><select id="fm-level">${['Principiante','Intermedio','Avanzado'].map(l=>`<option ${a&&a.level===l?'selected':''}>${l}</option>`).join('')}</select></div>
-      <div class="form-group"><label>Estado</label><select id="fm-active"><option value="1" ${!a||a.active?'selected':''}>Activo</option><option value="0" ${a&&!a.active?'selected':''}>Inactivo</option></select></div>
+    <div class="m-field"><label>Fecha (dejar vacío = hoy)</label>
+      <input class="inp" id="as-fecha" type="date">
     </div>
-    <div class="form-group"><label>Objetivo</label><input id="fm-goal" value="${a?a.goal||'':''}" placeholder="Mejorar técnica..."></div>
-    <div class="form-group"><label>Observaciones / Lesiones</label><textarea id="fm-notes">${a?a.notes||'':''}</textarea></div>
-    ${!a?`<div class="divider"></div><div class="section-title">Acceso del deportista</div>
-    <div class="grid2">
-      <div class="form-group"><label>Usuario de acceso</label><input type="text" id="fm-email" placeholder="nombre apellido" oninput="this.value=this.value.toLowerCase()"></div>
-      <div class="form-group"><label>Contraseña</label><input type="password" id="fm-pw" placeholder="mínimo 6 caracteres"></div>
+    <button class="btn-main" onclick="confirmarAsignacion()">Asignar</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+//  GYMFLOW — Motor de datos (localStorage)
+// ═══════════════════════════════════════════════════════════
+
+// Helpers de formato chileno
+const fCLP = n => new Intl.NumberFormat('es-CL',{style:'currency',currency:'CLP',maximumFractionDigits:0}).format(n)
+const fFecha = d => new Date(d+'T12:00:00').toLocaleDateString('es-CL')
+const iniciales = s => s.split(' ').map(p=>p[0]).join('').slice(0,2).toUpperCase()
+const hoy = () => new Date().toISOString().split('T')[0]
+const colorRPE = r => r<=6.5?'var(--green)':r<=8?'var(--yellow)':'var(--red)'
+const pillRPE = r => r<=6.5?'pill-green':r<=8?'pill-yellow':'pill-red'
+const aColor = r => r<=6.5?'hl-g':r<=8?'hl-y':'hl-r'
+
+// Estado de la app
+let currentUser = null
+let currentRole = null
+let rutinaActiva = null // ID rutina seleccionada para asignar
+
+// Carga / guarda datos
+function load(k,def){try{const v=localStorage.getItem('gf_'+k);return v?JSON.parse(v):def}catch{return def}}
+function save(k,v){localStorage.setItem('gf_'+k,JSON.stringify(v))}
+
+// Inicializar datos demo si no existen
+function initDemo(){
+  if(load('inited',false))return
+  save('profesores',[
+    {id:'p1',nombre:'Claudio Rojas',gym:'Promesas Coquimbo',email:'prof@gym.cl',pass:'123456',plan:'trial',trialDias:10,activo:true,mpLink:'https://mpago.la/promesas-coquimbo',precio:'$15.000 CLP/mes',msg:'Paga aquí tu membresía mensual.'},
+    {id:'p2',nombre:'Ana Torres',gym:'Gym Fitness',email:'ana@gym.cl',pass:'123456',plan:'pro',trialDias:0,activo:true,mpLink:'',precio:'',msg:''},
+    {id:'p3',nombre:'Pedro Soto',gym:'PowerGym',email:'pedro@gym.cl',pass:'123456',plan:'suspendido',trialDias:0,activo:false,mpLink:'',precio:'',msg:''},
+  ])
+  save('alumnos',[
+    {id:'a1',profId:'p1',nombre:'Matías Moreno',edad:17,nivel:'Avanzado',grupo:'Halterofilia Juvenil',codigo:'matias2026',pagado:true,activo:true,obs:'Selección nacional'},
+    {id:'a2',profId:'p1',nombre:'Fabián Villalobos',edad:16,nivel:'Avanzado',grupo:'Halterofilia Juvenil',codigo:'fabian2026',pagado:true,activo:true,obs:''},
+    {id:'a3',profId:'p1',nombre:'Luis Alfaro',edad:17,nivel:'Avanzado',grupo:'Halterofilia Juvenil',codigo:'alumno123',pagado:true,activo:true,obs:''},
+    {id:'a4',profId:'p1',nombre:'Jean Pool Ramos',edad:14,nivel:'Intermedio',grupo:'Halterofilia Infantil',codigo:'jeanpool2026',pagado:false,activo:true,obs:''},
+    {id:'a5',profId:'p1',nombre:'Carolina Alarcón',edad:15,nivel:'Avanzado',grupo:'Gimnasia Artística',codigo:'caro2026',pagado:true,activo:true,obs:'Entrenadora técnica'},
+  ])
+  save('rutinas',[
+    {id:'r1',profId:'p1',nombre:'Fuerza inferior — Martes/Viernes',dias:['M','V'],asignada:'todos',ejercicios:[
+      {id:'e1',nombre:'Sentadilla',series:4,reps:8,rpe:7.5,descanso:90,obs:'Rodillas hacia afuera'},
+      {id:'e2',nombre:'Peso muerto',series:3,reps:6,rpe:8,descanso:120,obs:'Espalda neutra'},
+      {id:'e3',nombre:'Prensa de pierna',series:3,reps:12,rpe:7,descanso:60,obs:''},
+      {id:'e4',nombre:'Curl femoral',series:3,reps:12,rpe:6.5,descanso:45,obs:'Rango completo'},
+      {id:'e5',nombre:'Extensión cuádriceps',series:3,reps:15,rpe:6,descanso:40,obs:''},
+    ]},
+    {id:'r2',profId:'p1',nombre:'Fuerza superior — Lunes/Jueves',dias:['L','J'],asignada:'todos',ejercicios:[
+      {id:'e6',nombre:'Press banca',series:4,reps:8,rpe:8,descanso:120,obs:''},
+      {id:'e7',nombre:'Remo con barra',series:4,reps:8,rpe:7.5,descanso:90,obs:''},
+      {id:'e8',nombre:'Press militar',series:3,reps:10,rpe:7,descanso:90,obs:''},
+    ]},
+  ])
+  save('registros',[
+    {id:'reg1',alumnoId:'a1',rutinaId:'r1',fecha:hoy(),completado:true,rpePromedio:7.0,ejercicios:[
+      {ejId:'e1',carga:75,rpe:7,comentario:''},
+      {ejId:'e2',carga:100,rpe:7,comentario:'Bien'},
+      {ejId:'e3',carga:120,rpe:6.5,comentario:''},
+      {ejId:'e4',carga:40,rpe:7,comentario:''},
+      {ejId:'e5',carga:50,rpe:7,comentario:''},
+    ]},
+    {id:'reg2',alumnoId:'a3',rutinaId:'r1',fecha:hoy(),completado:true,rpePromedio:9.0,ejercicios:[
+      {ejId:'e1',carga:90,rpe:9,comentario:'Muy pesado hoy'},
+      {ejId:'e2',carga:120,rpe:9,comentario:''},
+      {ejId:'e3',carga:140,rpe:9,comentario:''},
+      {ejId:'e4',carga:50,rpe:9,comentario:''},
+      {ejId:'e5',carga:60,rpe:9,comentario:''},
+    ]},
+  ])
+  save('inited',true)
+}
+initDemo()
+
+// Getters
+const getProfesores = () => load('profesores',[])
+const getAlumnos = () => load('alumnos',[])
+const getRutinas = () => load('rutinas',[])
+const getRegistros = () => load('registros',[])
+
+// ═══════════════════════════════════════════════════════════
+//  LOGIN / NAV
+// ═══════════════════════════════════════════════════════════
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('show'));document.getElementById('s-'+id).classList.add('show')}
+function setLoginTab(t){
+  ['prof','reg','alum'].forEach(x=>{
+    document.getElementById('lt-'+x).style.display=x===t?'block':'none'
+    document.querySelectorAll('.tab')[{prof:0,reg:1,alum:2}[x]].classList.toggle('on',x===t)
+  })
+}
+function loginProf(){
+  const e=document.getElementById('l-email').value.trim()
+  const p=document.getElementById('l-pass').value
+  const prof=getProfesores().find(x=>x.email===e&&x.pass===p)
+  if(!prof){toast('Correo o contraseña incorrectos','err');return}
+  if(!prof.activo){toast('Cuenta suspendida. Contáctanos.','err');return}
+  currentUser=prof;currentRole='prof'
+  renderProf();showScreen('prof')
+}
+function loginAlumno(){
+  const code=document.getElementById('a-code').value.trim().toLowerCase()
+  const alumnos=getAlumnos()
+  const al=alumnos.find(a=>a.codigo===code&&a.activo)
+  if(!al){toast('Código no encontrado','err');return}
+  currentUser=al;currentRole='alumno'
+  document.getElementById('alum-ava').textContent=iniciales(al.nombre)
+  alumTab('hoy');showScreen('alumno')
+}
+function registro(){
+  const nombre=document.getElementById('r-nombre').value.trim()
+  const gym=document.getElementById('r-gym').value.trim()
+  const email=document.getElementById('r-email').value.trim()
+  const pass=document.getElementById('r-pass').value
+  if(!nombre||!gym||!email||!pass){toast('Completa todos los campos','err');return}
+  if(pass.length<6){toast('Contraseña mínimo 6 caracteres','err');return}
+  const profs=getProfesores()
+  if(profs.find(p=>p.email===email)){toast('Ese correo ya está registrado','err');return}
+  const np={id:'p'+Date.now(),nombre,gym,email,pass,plan:'trial',trialDias:14,activo:true,mpLink:'',precio:'',msg:''}
+  profs.push(np);save('profesores',profs)
+  currentUser=np;currentRole='prof'
+  renderProf();showScreen('prof')
+  toast('¡Bienvenido! 14 días de prueba activos','ok')
+}
+function demoLogin(rol){
+  if(rol==='admin'){currentUser={nombre:'Super Admin'};currentRole='admin';renderAdmin();showScreen('admin')}
+  else if(rol==='prof'){currentUser=getProfesores()[0];currentRole='prof';renderProf();showScreen('prof')}
+  else{currentUser=getAlumnos()[0];currentRole='alumno';document.getElementById('alum-ava').textContent=iniciales(currentUser.nombre);alumTab('hoy');showScreen('alumno')}
+}
+function logout(){currentUser=null;currentRole=null;showScreen('login')}
+
+// ═══════════════════════════════════════════════════════════
+//  ADMIN
+// ═══════════════════════════════════════════════════════════
+function renderAdmin(){
+  const profs=getProfesores()
+  const alumnos=getAlumnos()
+  const activos=profs.filter(p=>p.activo&&p.plan!=='trial').length
+  const trial=profs.filter(p=>p.plan==='trial'&&p.activo).length
+  const susp=profs.filter(p=>!p.activo||p.plan==='suspendido').length
+  document.getElementById('adm-activos').textContent=activos
+  document.getElementById('adm-trial').textContent=trial
+  document.getElementById('adm-susp').textContent=susp
+  document.getElementById('adm-alumnos').textContent=alumnos.length
+  document.getElementById('adm-profs-list').innerHTML=profs.map(p=>{
+    const als=alumnos.filter(a=>a.profId===p.id).length
+    const estadoCls=p.activo&&p.plan!=='trial'?'pill-green':p.plan==='trial'?'pill-yellow':'pill-red'
+    const estadoLbl=p.plan==='trial'?`Trial ${p.trialDias}d`:p.plan==='suspendido'?'Suspendido':'Activo'
+    return `<div class="prof-card fade-up">
+      <div style="display:flex;align-items:flex-start;gap:.7rem;margin-bottom:.5rem">
+        <div class="ava" style="background:var(--accentbg);color:var(--accent2)">${iniciales(p.nombre)}</div>
+        <div style="flex:1"><div style="font-weight:700;font-size:.88rem">${p.nombre}</div><div style="font-size:.74rem;color:var(--text2)">${p.gym} · ${p.email}</div></div>
+        <span class="pill ${estadoCls}">${estadoLbl}</span>
+      </div>
+      <div class="prof-stats">
+        <div class="ps"><div class="ps-v">${als}</div><div class="ps-l">Alumnos</div></div>
+        <div class="ps"><div class="ps-v">${p.plan||'trial'}</div><div class="ps-l">Plan</div></div>
+        <div class="ps"><div class="ps-v">${p.activo?'Sí':'No'}</div><div class="ps-l">Activo</div></div>
+      </div>
+      <div class="prof-actions">
+        ${p.activo?`<button class="btn-sm btn-danger" onclick="toggleProf('${p.id}',false)">Suspender</button>`:`<button class="btn-sm btn-success" onclick="toggleProf('${p.id}',true)">Reactivar</button>`}
+        <button class="btn-sm btn-accent" onclick="toast('Email enviado a ${p.nombre}','inf')">✉ Contactar</button>
+        <button class="btn-sm" onclick="extenderTrial('${p.id}')">+30 días</button>
+      </div>
+    </div>`
+  }).join('')
+}
+function toggleProf(id,activar){
+  const profs=getProfesores()
+  const p=profs.find(x=>x.id===id)
+  if(!p)return
+  p.activo=activar;p.plan=activar?'pro':'suspendido'
+  save('profesores',profs);renderAdmin()
+  toast(p.nombre+(activar?' reactivado':' suspendido'),activar?'ok':'err')
+}
+function extenderTrial(id){
+  const profs=getProfesores()
+  const p=profs.find(x=>x.id===id)
+  if(!p)return
+  p.trialDias=30;save('profesores',profs);renderAdmin()
+  toast('Trial extendido 30 días','ok')
+}
+
+// ═══════════════════════════════════════════════════════════
+//  PROFESOR
+// ═══════════════════════════════════════════════════════════
+function showPTab(tab){
+  ['inicio','alumnos','rutinas','reportes','config'].forEach(t=>{
+    document.getElementById('pt-'+t).style.display=t===tab?'block':'none'
+  })
+  document.querySelectorAll('#prof-itabs .itab').forEach((b,i)=>{
+    b.classList.toggle('on',['inicio','alumnos','rutinas','reportes','config'][i]===tab)
+  })
+  if(tab==='alumnos')renderProfAlumnos()
+  if(tab==='rutinas')renderProfRutinas()
+  if(tab==='reportes')renderProfReportes()
+  if(tab==='config')renderConfig()
+}
+function renderProf(){
+  if(!currentUser)return
+  // Badge plan
+  const badge=document.getElementById('prof-badge')
+  const plan=currentUser.plan||'trial'
+  badge.textContent=plan==='trial'?`TRIAL ${currentUser.trialDias}d`:plan.toUpperCase()
+  badge.className='pill '+(plan==='trial'?'pill-yellow':plan==='suspendido'?'pill-red':'pill-green')
+  // Trial banner
+  const tb=document.getElementById('trial-banner')
+  tb.style.display=plan==='trial'?'flex':'none'
+  if(plan==='trial')document.getElementById('trial-text').textContent=`Trial: ${currentUser.trialDias} días restantes`
+  // Métricas
+  const alumnos=getAlumnos().filter(a=>a.profId===currentUser.id&&a.activo)
+  const registrosHoy=getRegistros().filter(r=>r.fecha===hoy()&&alumnos.some(a=>a.id===r.alumnoId))
+  const rpes=registrosHoy.map(r=>r.rpePromedio).filter(Boolean)
+  const rpeP=rpes.length?Math.round(rpes.reduce((s,v)=>s+v,0)/rpes.length*10)/10:null
+  document.getElementById('p-activos').textContent=alumnos.length
+  document.getElementById('p-activos-note').textContent=`de ${alumnos.length} registrados`
+  document.getElementById('p-rpe').textContent=rpeP||'—'
+  document.getElementById('p-rpe').style.color=rpeP?colorRPE(rpeP):'var(--text)'
+  document.getElementById('p-rpe-note').textContent=rpeP?(rpeP>8?'Carga alta':rpeP>6.5?'Moderado':'Normal'):'sin registros'
+  // Cumplimiento simplificado
+  const rutinas=getRutinas().filter(r=>r.profId===currentUser.id)
+  const totalAsig=rutinas.length*alumnos.length
+  const completadas=registrosHoy.filter(r=>r.completado).length
+  const cump=totalAsig>0?Math.round(completadas/Math.max(alumnos.length,1)*100):0
+  document.getElementById('p-cump').textContent=cump+'%'
+  document.getElementById('p-cump').style.color=cump>=85?'var(--green)':cump>=70?'var(--yellow)':'var(--red)'
+  document.getElementById('p-sinreg').textContent=Math.max(0,alumnos.length-registrosHoy.length)
+  // Semáforo
+  const g=rpes.filter(r=>r<=6.5).length,y=rpes.filter(r=>r>6.5&&r<=8).length,ro=rpes.filter(r=>r>8).length
+  document.getElementById('sem-g').textContent=g
+  document.getElementById('sem-y').textContent=y
+  document.getElementById('sem-r').textContent=ro
+  const total=g+y+ro
+  const bar=document.getElementById('sem-bar')
+  bar.innerHTML=total>0
+    ?`${g>0?`<div class="sem-g" style="flex:${g}"></div>`:''}${y>0?`<div class="sem-y" style="flex:${y}"></div>`:''}${ro>0?`<div class="sem-r" style="flex:${ro}"></div>`:''}`
+    :'<div style="flex:1;background:var(--bg4);border-radius:3px"></div>'
+  // Alertas
+  const alertas=registrosHoy.filter(r=>r.rpePromedio>8)
+  document.getElementById('alertas-title').style.display=alertas.length?'block':'none'
+  document.getElementById('alertas-list').innerHTML=alertas.map(r=>{
+    const al=alumnos.find(a=>a.id===r.alumnoId)
+    if(!al)return''
+    return `<div class="a-item hl-r">
+      <div class="ava" style="background:var(--redbg);color:var(--red)">${iniciales(al.nombre)}</div>
+      <div style="flex:1"><div class="a-name">${al.nombre}</div><div class="a-meta">${al.grupo}</div></div>
+      <span class="pill pill-red">RPE ${r.rpePromedio}</span>
+    </div>`
+  }).join('')
+  showPTab('inicio')
+}
+function renderProfAlumnos(){
+  const alumnos=getAlumnos().filter(a=>a.profId===currentUser.id)
+  document.getElementById('alumnos-count').textContent=`Mis alumnos (${alumnos.length})`
+  const regsHoy=getRegistros().filter(r=>r.fecha===hoy())
+  document.getElementById('prof-alumnos-list').innerHTML=alumnos.length===0
+    ?'<div class="empty"><div class="empty-ico">👥</div><div class="empty-txt">Agrega tu primer alumno</div></div>'
+    :alumnos.map(al=>{
+      const reg=regsHoy.find(r=>r.alumnoId===al.id)
+      const rpe=reg?.rpePromedio
+      return `<div class="a-item ${rpe?aColor(rpe):''}">
+        <div class="ava" style="background:var(--accentbg);color:var(--accent2)">${iniciales(al.nombre)}</div>
+        <div style="flex:1">
+          <div class="a-name">${al.nombre}</div>
+          <div class="a-meta">${al.grupo||''} · ${al.nivel} · código: ${al.codigo}</div>
+        </div>
+        <div style="text-align:right">
+          <span class="pill ${al.pagado?'pill-green':'pill-red'}" style="margin-bottom:3px">${al.pagado?'Pagado':'Sin pago'}</span>
+          ${rpe?`<div style="font-size:.7rem;color:${colorRPE(rpe)};margin-top:2px">RPE ${rpe}</div>`:'<div style="font-size:.7rem;color:var(--text3)">sin registro</div>'}
+        </div>
+      </div>`
+    }).join('')
+}
+function renderProfRutinas(){
+  const rutinas=getRutinas().filter(r=>r.profId===currentUser.id)
+  document.getElementById('rutinas-count').textContent=`Mis rutinas (${rutinas.length})`
+  // Poblar select de asignar
+  const alumnos=getAlumnos().filter(a=>a.profId===currentUser.id)
+  const selAs=document.getElementById('nr-asignar')
+  selAs.innerHTML='<option value="todos">Todos los alumnos</option>'+
+    alumnos.map(a=>`<option value="${a.id}">${a.nombre}</option>`).join('')
+  document.getElementById('prof-rutinas-list').innerHTML=rutinas.length===0
+    ?'<div class="empty"><div class="empty-ico">📋</div><div class="empty-txt">Crea tu primera rutina</div></div>'
+    :rutinas.map(r=>`<div class="card">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div style="flex:1">
+          <div style="font-weight:700;font-size:.88rem">${r.nombre}</div>
+          <div class="card-sub">${r.ejercicios.length} ejercicios · ${r.dias.join('·')}</div>
+          <span class="pill pill-accent" style="margin-top:.4rem">${r.asignada==='todos'?'Todos':getAlumnos().find(a=>a.id===r.asignada)?.nombre||r.asignada}</span>
+        </div>
+        <div style="display:flex;gap:.3rem">
+          <button class="btn-sm" onclick="openAsignar('${r.id}')">Asignar</button>
+          <button class="btn-sm btn-danger" onclick="eliminarRutina('${r.id}')">✕</button>
+        </div>
+      </div>
+    </div>`).join('')
+}
+function renderProfReportes(){
+  const dias=['L','M','X','J','V','S','D']
+  const pcts=[92,87,79,61,88,0,0]
+  document.getElementById('rep-week').innerHTML=dias.map((d,i)=>{
+    const cls=pcts[i]===0?'day-nd':pcts[i]>=75?'day-ok':'day-no'
+    return `<div class="day-c"><div class="day-lbl">${d}</div><div class="day-dot ${cls}">${pcts[i]>0?pcts[i]+'%':'—'}</div></div>`
+  }).join('')
+  const alumnos=getAlumnos().filter(a=>a.profId===currentUser.id)
+  const regs=getRegistros()
+  document.getElementById('rep-alumnos').innerHTML=alumnos.map(al=>{
+    const pct=Math.floor(Math.random()*30+70)
+    const col=pct>=85?'var(--green)':pct>=70?'var(--yellow)':'var(--red)'
+    return `<div class="prog-row">
+      <div class="prog-lbl"><span class="prog-name">${al.nombre}</span><span class="prog-pct" style="color:${col}">${pct}%</span></div>
+      <div class="prog-wrap"><div class="prog-fill" style="width:${pct}%;background:${col}"></div></div>
+    </div>`
+  }).join('')
+}
+function renderConfig(){
+  document.getElementById('cfg-gym').value=currentUser.gym||''
+  document.getElementById('cfg-nombre').value=currentUser.nombre||''
+  document.getElementById('cfg-mp').value=currentUser.mpLink||''
+  document.getElementById('cfg-precio').value=currentUser.precio||''
+  document.getElementById('cfg-msg').value=currentUser.msg||''
+  updateLinkPreview()
+}
+function updateLinkPreview(){
+  const v=document.getElementById('cfg-mp').value
+  document.getElementById('link-prev-text').textContent=v||'—'
+}
+function guardarConfig(){
+  const profs=getProfesores()
+  const idx=profs.findIndex(p=>p.id===currentUser.id)
+  if(idx<0)return
+  profs[idx].gym=document.getElementById('cfg-gym').value
+  profs[idx].nombre=document.getElementById('cfg-nombre').value
+  profs[idx].mpLink=document.getElementById('cfg-mp').value
+  profs[idx].precio=document.getElementById('cfg-precio').value
+  profs[idx].msg=document.getElementById('cfg-msg').value
+  save('profesores',profs)
+  currentUser=profs[idx]
+  toast('Configuración guardada ✓','ok')
+}
+function suscribirse(){toast('Redirigiendo a Mercado Pago...','inf')}
+function agregarAlumno(){
+  const nombre=document.getElementById('na-nombre').value.trim()
+  const codigo=document.getElementById('na-codigo').value.trim().toLowerCase()
+  if(!nombre||!codigo){toast('Nombre y código son obligatorios','err');return}
+  const alumnos=getAlumnos()
+  if(alumnos.find(a=>a.codigo===codigo)){toast('Ese código ya existe','err');return}
+  alumnos.push({
+    id:'a'+Date.now(),profId:currentUser.id,
+    nombre,edad:+document.getElementById('na-edad').value||0,
+    nivel:document.getElementById('na-nivel').value,
+    grupo:document.getElementById('na-grupo').value,
+    codigo,pagado:false,activo:true,
+    obs:document.getElementById('na-obs').value
+  })
+  save('alumnos',alumnos)
+  closeModal('m-nuevo-alumno')
+  toast('Alumno agregado ✓','ok')
+  renderProfAlumnos()
+  renderProf()
+  // Reset
+  ;['na-nombre','na-edad','na-grupo','na-codigo','na-obs'].forEach(id=>document.getElementById(id).value='')
+}
+function crearRutina(){
+  const nombre=document.getElementById('nr-nombre').value.trim()
+  if(!nombre){toast('Pon un nombre a la rutina','err');return}
+  const dias=[...document.querySelectorAll('#dias-wrap .dia-btn.on')].map(b=>b.textContent)
+  const ejercicios=[...document.querySelectorAll('#ej-builder-list .ej-builder')].map((div,i)=>{
+    const inputs=div.querySelectorAll('input')
+    const nVal=(idx,def)=>{
+      const v=parseFloat(inputs[idx].value)
+      return isNaN(v)?def:v
+    }
+    return{
+      id:'e'+Date.now()+i,
+      nombre:inputs[0].value.trim()||'Ejercicio '+(i+1),
+      series:nVal(1,3),
+      reps:nVal(2,10),
+      rpe:nVal(3,7),
+      descanso:nVal(4,60),
+      obs:inputs[5]?.value||''
+    }
+  })
+  const rutinas=getRutinas()
+  rutinas.push({id:'r'+Date.now(),profId:currentUser.id,nombre,dias,asignada:document.getElementById('nr-asignar').value,ejercicios})
+  save('rutinas',rutinas)
+  closeModal('m-nueva-rutina')
+  toast('Rutina creada ✓','ok')
+  renderProfRutinas()
+  document.getElementById('nr-nombre').value=''
+}
+function eliminarRutina(id){
+  const rutinas=getRutinas().filter(r=>r.id!==id)
+  save('rutinas',rutinas);renderProfRutinas()
+  toast('Rutina eliminada','inf')
+}
+function openAsignar(rutinaId){
+  rutinaActiva=rutinaId
+  const rutina=getRutinas().find(r=>r.id===rutinaId)
+  document.getElementById('m-asignar-title').textContent='Asignar: '+rutina?.nombre
+  const alumnos=getAlumnos().filter(a=>a.profId===currentUser.id)
+  const sel=document.getElementById('as-alumnos')
+  sel.innerHTML='<option value="todos">Todos los alumnos</option>'+
+    alumnos.map(a=>`<option value="${a.id}">${a.nombre}</option>`).join('')
+  const hoyDate=new Date().toISOString().split('T')[0]
+  document.getElementById('as-fecha').value=hoyDate
+  openModal('m-asignar')
+}
+function confirmarAsignacion(){
+  if(!rutinaActiva)return
+  const rutinas=getRutinas()
+  const idx=rutinas.findIndex(r=>r.id===rutinaActiva)
+  if(idx<0)return
+  rutinas[idx].asignada=document.getElementById('as-alumnos').value
+  save('rutinas',rutinas)
+  closeModal('m-asignar')
+  toast('Rutina asignada ✓','ok')
+  renderProfRutinas()
+}
+function addEj(){
+  const d=document.createElement('div');d.className='ej-builder'
+  d.innerHTML=`<button class="btn-rm" onclick="rmEj(this)">×</button>
+    <div class="b-row"><input class="b-inp" style="flex:2" placeholder="Nombre del ejercicio"></div>
+    <div class="b-row">
+      <input class="b-inp" placeholder="Series" type="number">
+      <input class="b-inp" placeholder="Reps" type="number">
+      <input class="b-inp" placeholder="RPE obj." type="number" step="0.5">
+      <input class="b-inp" placeholder="Desc.seg" type="number">
+    </div>
+    <div class="b-row"><input class="b-inp" style="flex:1" placeholder="Obs. técnica"></div>`
+  document.getElementById('ej-builder-list').appendChild(d)
+}
+function rmEj(btn){
+  if(document.querySelectorAll('#ej-builder-list .ej-builder').length>1)btn.closest('.ej-builder').remove()
+  else toast('Mínimo 1 ejercicio','err')
+}
+function toggleDia(btn){btn.classList.toggle('on')}
+
+// ═══════════════════════════════════════════════════════════
+//  ALUMNO
+// ═══════════════════════════════════════════════════════════
+let ejState=[] // estado local de los ejercicios de la sesión
+
+function alumTab(tab){
+  ['hoy','hist','perf'].forEach(t=>document.getElementById('abt-'+t).classList.remove('on'))
+  document.getElementById('abt-'+tab).classList.add('on')
+  const main=document.getElementById('alum-main')
+  if(tab==='hoy')renderAlumnoHoy(main)
+  else if(tab==='hist')renderAlumnoHist(main)
+  else renderAlumnoPerfil(main)
+}
+
+function renderAlumnoHoy(main){
+  if(!currentUser)return
+  // Buscar rutina de hoy
+  const prof=getProfesores().find(p=>p.id===currentUser.profId)
+  const diasHoy=['D','L','M','X','J','V','S'][new Date().getDay()]
+  const rutinas=getRutinas().filter(r=>r.profId===currentUser.profId&&(r.asignada==='todos'||r.asignada===currentUser.id)&&r.dias.includes(diasHoy))
+  const rutina=rutinas[0]
+
+  // ¿Ya hay registro completado hoy?
+  const regHoy=getRegistros().find(r=>r.alumnoId===currentUser.id&&r.fecha===hoy()&&r.completado)
+  if(regHoy){
+    main.innerHTML=`<div class="comp-wrap fade-up">
+      <div class="comp-icon">✓</div>
+      <div class="comp-title">¡Sesión completada!</div>
+      <div style="color:var(--text2);font-size:.85rem;margin-top:.25rem">${rutina?.nombre||'Sesión de hoy'}</div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-v" style="color:var(--green)">${regHoy.ejercicios?.length||0}/${rutina?.ejercicios?.length||0}</div><div class="stat-l">Ejercicios</div></div>
+        <div class="stat-v-wrap stat-box"><div class="stat-v" style="color:${colorRPE(regHoy.rpePromedio||7)}">${regHoy.rpePromedio||'—'}</div><div class="stat-l">RPE prom.</div></div>
+        <div class="stat-box"><div class="stat-v" style="color:var(--accent2)">✓</div><div class="stat-l">Listo</div></div>
+      </div>
+      ${prof?.mpLink?`<div class="pago-banner" style="width:100%;margin-top:.5rem">
+        <div style="flex:1"><div style="font-size:.82rem;font-weight:700">Membresía</div>
+        <div style="font-size:.72rem;color:var(--text2)">${prof.precio||''}</div>
+        ${prof.msg?`<div style="font-size:.7rem;color:var(--text3);margin-top:2px">${prof.msg}</div>`:''}
+        </div>
+        <a href="${prof.mpLink}" target="_blank" class="btn-pagar">Pagar →</a>
+      </div>`:''}
+      <button onclick="alumTab('hist')" style="width:100%;margin-top:.5rem;padding:.7rem;border:1px solid var(--border2);background:transparent;border-radius:var(--r);color:var(--text2);font-size:.85rem">Ver mi historial →</button>
+    </div>`
+    return
+  }
+
+  if(!rutina){
+    main.innerHTML=`<div class="empty" style="margin-top:3rem">
+      <div class="empty-ico">🎉</div>
+      <div class="empty-txt">¡Día de descanso!<br>No tienes rutina para hoy.</div>
+      ${prof?.mpLink?`<div class="pago-banner" style="margin-top:1rem;text-align:left">
+        <div style="flex:1"><div style="font-size:.82rem;font-weight:700">Tu membresía</div><div style="font-size:.72rem;color:var(--text2)">${prof.precio||''}</div></div>
+        <a href="${prof.mpLink}" target="_blank" class="btn-pagar">Pagar →</a>
+      </div>`:''}
+    </div>`;return
+  }
+
+  // Inicializar ejState si está vacío o es de otra rutina
+  if(ejState.length===0||ejState[0]?.rutinaId!==rutina.id){
+    ejState=rutina.ejercicios.map(e=>({...e,rutinaId:rutina.id,done:false,carga:0,rpe:null,comentario:''}))
+  }
+
+  const done=ejState.filter(e=>e.done).length
+  const total=ejState.length
+  const pct=total>0?done/total*100:0
+
+  main.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.4rem">
+      <div>
+        <div style="font-size:.75rem;color:var(--text2)">${new Date().toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long'})}</div>
+        <div style="font-size:1rem;font-weight:800;letter-spacing:-.3px;margin-top:1px">${rutina.nombre}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-size:1.1rem;font-weight:800;color:var(--accent2)">${done}/${total}</div>
+        <div style="font-size:.65rem;color:var(--text3)">completados</div>
+      </div>
+    </div>
+    <div class="prog-wrap"><div class="prog-fill" id="a-prog" style="width:${pct}%"></div></div>
+    <div id="ejs-list"></div>
+    ${prof?.mpLink?`<div class="pago-banner">
+      <div style="flex:1"><div style="font-size:.8rem;font-weight:700">Tu membresía · ${prof.precio||''}</div><div style="font-size:.7rem;color:var(--text2)">${prof.msg||''}</div></div>
+      <a href="${prof.mpLink}" target="_blank" class="btn-pagar">Pagar →</a>
     </div>`:''}
-    <div class="divider"></div>
-    <div class="flex gap8 je">
-      ${a?`<button class="btn btn-danger" onclick="deleteAthlete('${a.id}')">Eliminar</button>`:''}
-      <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
-      <button class="btn btn-primary" id="save-ath-btn" onclick="saveAthlete('${id||''}')">Guardar</button>
-    </div>`);
-};
-
-window.saveAthlete = async id => {
-  const name = ge('fm-name').value.trim();
-  if(!name){ showToast('Nombre obligatorio','error'); return; }
-  const btn = ge('save-ath-btn'); btn.disabled=true; btn.innerHTML='<span class="spin"></span>';
-  const data = { name, dob:ge('fm-dob').value||null, sport:ge('fm-sport').value, category:ge('fm-cat').value, level:ge('fm-level').value, active:ge('fm-active').value==='1', goal:ge('fm-goal').value, notes:ge('fm-notes').value };
-  try {
-    if(id){
-      await updateDoc2('athletes',id,data);
-      Object.assign(cache.athletes.find(a=>a.id===id), data);
-    } else {
-      const newA = await addDoc2('athletes',{...data,assignedTo:[]});
-      cache.athletes.push(newA);
-      const usernameEl=ge('fm-email'), pwEl=ge('fm-pw');
-      if(usernameEl?.value && pwEl?.value){
-        await addDoc2('users',{username:usernameEl.value.trim().toLowerCase(), password:pwEl.value, role:'athlete', name, athleteId:newA.id});
-      }
-    }
-    closeModal(); renderAthletes(); showToast('Deportista guardado','success');
-  } catch(e){ showToast('Error: '+e.message,'error'); }
-  finally { btn.disabled=false; btn.innerHTML='Guardar'; }
-};
-
-window.deleteAthlete = async id => {
-  if(!confirm('¿Eliminar deportista?')) return;
-  await deleteDoc2('athletes',id);
-  cache.athletes = cache.athletes.filter(a=>a.id!==id);
-  closeModal(); renderAthletes(); showToast('Eliminado','success');
-};
-
-window.openAthleteDetail = id => {
-  const a = cache.athletes.find(x=>x.id===id); if(!a) return;
-  const assigned = cache.routines.filter(r=>(r.assignedTo||[]).includes(id));
-  const al = cache.logs.filter(l=>l.athleteId===id);
-  const done = al.filter(l=>l.status==='completed').length;
-  const age = a.dob ? Math.floor((Date.now()-new Date(a.dob))/(365.25*24*3600*1000)) : '—';
-  const pct = al.length ? Math.round(done/al.length*100) : 0;
-  openModal(`Ficha: ${a.name}`,`
-    <div class="grid3" style="margin-bottom:16px">
-      <div class="stat-card accent"><div class="stat-lbl">Edad</div><div class="stat-val">${age}</div></div>
-      <div class="stat-card green"><div class="stat-lbl">Cumplimiento</div><div class="stat-val">${pct}%</div></div>
-      <div class="stat-card blue"><div class="stat-lbl">Sesiones</div><div class="stat-val">${al.length}</div></div>
-    </div>
-    <div class="grid2">
-      <div><label>Deporte</label><div style="font-weight:600">${a.sport||'—'}</div></div>
-      <div><label>Nivel</label><div style="font-weight:600">${a.level||'—'}</div></div>
-    </div>
-    <div style="margin-top:12px"><label>Objetivo</label><div style="font-size:13px;color:var(--text2)">${a.goal||'—'}</div></div>
-    ${a.notes?`<div style="margin-top:12px"><label>Observaciones</label><div style="font-size:13px;color:var(--warn)">${a.notes}</div></div>`:''}
-    <div class="divider"></div>
-    <div class="section-title">Rutinas asignadas (${assigned.length})</div>
-    ${assigned.map(r=>`<div class="card-sm" style="margin-bottom:8px"><div style="font-size:14px;font-weight:600">${r.name}</div></div>`).join('')||'<div style="color:var(--text3);font-size:13px">Ninguna</div>'}
-    <div class="divider"></div>
-    <div class="flex gap8 je">
-      <button class="btn btn-secondary" onclick="closeModal()">Cerrar</button>
-      <button class="btn btn-primary" onclick="closeModal();openAthleteModal('${id}')">Editar ficha</button>
-    </div>`,true);
-};
-
-// ── ROUTINES ─────────────────────────────────────────
-function renderRoutines(){
-  ge('routines-count').textContent = `${cache.routines.length} rutinas`;
-  const list = ge('routines-list');
-  if(!cache.routines.length){ list.innerHTML=`<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">No hay rutinas</div></div>`; return; }
-  list.innerHTML = cache.routines.map(r=>{
-    const names = (r.assignedTo||[]).map(aid=>cache.athletes.find(x=>x.id===aid)?.name||'?').join(', ');
-    return `<div class="card" style="margin-bottom:14px">
-      <div class="flex ac jb" style="margin-bottom:12px">
-        <div><div style="font-size:17px;font-weight:700">${r.name}</div><div style="font-size:12px;color:var(--text2);margin-top:3px">${r.objective||''}</div></div>
-        <span class="badge badge-accent">Activa</span>
-      </div>
-      <div class="flex gap8" style="margin-bottom:12px;flex-wrap:wrap">
-        ${r.startDate?`<span class="tag">📅 ${r.startDate} → ${r.endDate||''}</span>`:''}
-        <span class="tag">👤 ${(r.assignedTo||[]).length} atleta(s)</span>
-        <span class="tag">📆 ${(r.days||[]).length} día(s)</span>
-      </div>
-      ${names?`<div style="font-size:12px;color:var(--text2);margin-bottom:12px">Asignada a: <strong>${names}</strong></div>`:''}
-      ${(r.days||[]).map((d,di)=>`
-        <div class="day-block">
-          <div class="day-block-header" onclick="toggleDay('d${r.id}_${di}')">
-            <span>${d.day} — ${d.label}</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-          </div>
-          <div id="d${r.id}_${di}" class="day-block-body hidden">
-            ${(d.blocks||[]).map(b=>`
-              <div class="section-title" style="margin-top:8px">${b.name}</div>
-              ${(b.exercises||[]).map((ex,ei)=>{
-                const exData = cache.exercises.find(x=>x.id===ex.exId);
-                return `<div class="exercise-block">
-                  <div class="flex ac gap8" style="margin-bottom:10px"><div class="ex-number">${ei+1}</div><div style="font-size:14px;font-weight:600">${exData?exData.name:'Ejercicio'}</div>${exData?`<span class="tag">${exData.category}</span>`:''}</div>
-                  <div class="flex gap8" style="flex-wrap:wrap">
-                    <div class="param-pill"><div class="param-val">${ex.sets}</div><div class="param-lbl">Series</div></div>
-                    <div class="param-pill"><div class="param-val">${ex.reps}</div><div class="param-lbl">Reps</div></div>
-                    <div class="param-pill"><div class="param-val">${ex.load||'—'}</div><div class="param-lbl">Carga</div></div>
-                    <div class="param-pill"><div class="param-val">${ex.intensity?ex.intensity+'%':'—'}</div><div class="param-lbl">Int.</div></div>
-                    <div class="param-pill"><div class="param-val">RPE ${ex.rpe}</div><div class="param-lbl">Obj.</div></div>
-                    <div class="param-pill"><div class="param-val">${ex.rest}</div><div class="param-lbl">Descanso</div></div>
-                    ${ex.tempo?`<div class="param-pill"><div class="param-val">${ex.tempo}</div><div class="param-lbl">Tempo</div></div>`:''}
-                  </div>
-                  ${ex.notes?`<div style="font-size:12px;color:var(--text2);margin-top:8px;padding:7px 10px;background:var(--bg4);border-radius:6px">💡 ${ex.notes}</div>`:''}
-                </div>`;
-              }).join('')}
-            `).join('')}
-          </div>
-        </div>`).join('')}
-      <div class="flex gap8 mt12">
-        <button class="btn btn-secondary btn-sm" onclick="openAssignModal(null,'${r.id}')">+ Asignar</button>
-        <button class="btn btn-secondary btn-sm" onclick="openNewRoutineModal('${r.id}')">Editar</button>
-        <button class="btn btn-danger btn-sm" onclick="deleteRoutine('${r.id}')">Eliminar</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-window.toggleDay = id => { const el=ge(id); if(el) el.classList.toggle('hidden'); };
-window.deleteRoutine = async id => {
-  if(!confirm('¿Eliminar rutina?')) return;
-  await deleteDoc2('routines',id);
-  cache.routines = cache.routines.filter(r=>r.id!==id);
-  renderRoutines(); showToast('Rutina eliminada','success');
-};
-
-// ── ROUTINE BUILDER ───────────────────────────────────
-window.openNewRoutineModal = (editId) => {
-  const r = editId ? cache.routines.find(x=>x.id===editId) : null;
-  builderDays = r ? JSON.parse(JSON.stringify(r.days||[])) : [{day:'Lunes',label:'Sesión A',blocks:[{name:'Calentamiento',exercises:[]},{name:'Principal',exercises:[]},{name:'Complementarios',exercises:[]}]}];
-  builderCurrentDay = 0;
-  ge('modal-box').classList.add('modal-lg');
-  openModal(r?'Editar rutina':'Nueva rutina',`
-    <div class="grid2" style="margin-bottom:16px">
-      <div class="form-group"><label>Nombre *</label><input id="rt-name" value="${r?r.name:''}" placeholder="Bloque Fuerza — Semana 1"></div>
-      <div class="form-group"><label>Objetivo</label><input id="rt-obj" value="${r?r.objective||'':''}" placeholder="Desarrollar fuerza máxima..."></div>
-      <div class="form-group"><label>Fecha inicio</label><input type="date" id="rt-start" value="${r?r.startDate||'':''}"></div>
-      <div class="form-group"><label>Fecha fin</label><input type="date" id="rt-end" value="${r?r.endDate||'':''}"></div>
-    </div>
-    <div class="divider"></div>
-    <div class="flex ac jb" style="margin-bottom:12px">
-      <div class="section-title" style="margin:0">Días de entrenamiento</div>
-      <select id="add-day-select" onchange="addBuilderDay(this.value);this.value=''" style="width:auto;padding:6px 12px;font-size:13px">
-        <option value="">+ Agregar día...</option>
-        <option>Lunes</option><option>Martes</option><option>Miércoles</option>
-        <option>Jueves</option><option>Viernes</option><option>Sábado</option><option>Domingo</option>
-      </select>
-    </div>
-    <div id="builder-day-tabs" class="flex gap8" style="margin-bottom:16px;flex-wrap:wrap"></div>
-    <div id="builder-day-content"></div>
-    <div class="divider"></div>
-    <div class="flex gap8 je">
-      <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
-      <button class="btn btn-primary" id="save-rt-btn" onclick="saveRoutine('${editId||''}')">Guardar rutina</button>
-    </div>`,true);
-  renderBuilderTabs(); renderBuilderDay();
-};
-
-window.addBuilderDay = (day) => {
-  if(!day) return;
-  builderDays.push({day, label:'Sesión '+String.fromCharCode(65+builderDays.length), blocks:[{name:'Calentamiento',exercises:[]},{name:'Principal',exercises:[]},{name:'Complementarios',exercises:[]}]});
-  builderCurrentDay=builderDays.length-1;
-  renderBuilderTabs(); renderBuilderDay();
-};
-window.removeBuilderDay = (i) => {
-  if(builderDays.length===1){ showToast('La rutina debe tener al menos un día','error'); return; }
-  builderDays.splice(i,1);
-  builderCurrentDay=Math.min(builderCurrentDay, builderDays.length-1);
-  renderBuilderTabs(); renderBuilderDay();
-};
-
-function renderBuilderTabs(){
-  const tabs=ge('builder-day-tabs'); if(!tabs) return;
-  tabs.innerHTML=builderDays.map((d,i)=>`
-    <div class="flex ac gap4" style="padding:5px 5px 5px 12px;border-radius:8px;font-size:13px;font-weight:600;${i===builderCurrentDay?'background:var(--accent);color:#0f1117':'background:var(--bg4);color:var(--text2)'}">
-      <span onclick="switchBuilderDay(${i})" style="cursor:pointer">${d.day}</span>
-      <span onclick="event.stopPropagation();removeBuilderDay(${i})" style="cursor:pointer;padding:2px 5px;border-radius:4px;font-size:11px;opacity:.7;${i===builderCurrentDay?'':'hover'}">✕</span>
-    </div>`).join('');
-}
-window.switchBuilderDay = i => { syncBuilderFromDOM(); builderCurrentDay=i; renderBuilderTabs(); renderBuilderDay(); };
-function syncBuilderFromDOM(){
-  const c = ge('builder-day-content'); if(!c) return;
-  const d = builderDays[builderCurrentDay]; if(!d) return;
-  const sels = c.querySelectorAll('select[data-bi]');
-  sels.forEach(sel => {
-    const bi = +sel.dataset.bi, ei = +sel.dataset.ei;
-    if(d.blocks[bi]&&d.blocks[bi].exercises[ei]) d.blocks[bi].exercises[ei].exId = sel.value;
-  });
+  `
+  renderEjs()
 }
 
-function renderBuilderDay(){
-  const c=ge('builder-day-content'); if(!c||!builderDays[builderCurrentDay]) return;
-  const d=builderDays[builderCurrentDay];
-  const exOpts=cache.exercises.map(e=>`<option value="${e.id}">${e.name} (${e.category})</option>`).join('');
-  c.innerHTML=`
-    <div class="form-group" style="margin-bottom:12px">
-      <label>Etiqueta de sesión</label>
-      <input value="${d.label}" placeholder="Sesión A — Fuerza" onchange="builderDays[${builderCurrentDay}].label=this.value">
-    </div>
-    ${(d.blocks||[]).map((b,bi)=>`
-      <div style="margin-bottom:14px">
-        <div class="flex ac jb" style="margin-bottom:8px"><div style="font-size:13px;font-weight:700;color:var(--accent)">${b.name}</div><button class="btn btn-secondary btn-sm" onclick="addExToBlock(${builderCurrentDay},${bi})">+ Ejercicio</button></div>
-        ${!b.exercises.length?`<div style="color:var(--text3);font-size:12px;padding:8px 0">Sin ejercicios</div>`:''}
-        ${(b.exercises||[]).map((ex,ei)=>`
-          <div class="exercise-block">
-            <div class="flex ac jb" style="margin-bottom:10px">
-              <div class="flex ac gap8"><div class="ex-number">${ei+1}</div>
-                <select data-bi="${bi}" data-ei="${ei}" style="width:220px;padding:5px 8px;font-size:13px" onchange="setExId(${builderCurrentDay},${bi},${ei},this.value)">
-                  <option value="">— Seleccionar —</option>${exOpts}
-                </select>
-              </div>
-              <button class="btn-icon btn-sm" onclick="removeEx(${builderCurrentDay},${bi},${ei})">✕</button>
-            </div>
-            <div class="flex gap8" style="flex-wrap:wrap">
-              <div style="flex:0 0 65px"><label style="font-size:10px">Series</label><input type="number" value="${ex.sets}" min="1" style="padding:5px 8px" onchange="builderDays[${builderCurrentDay}].blocks[${bi}].exercises[${ei}].sets=+this.value"></div>
-              <div style="flex:0 0 75px"><label style="font-size:10px">Reps</label><input value="${ex.reps}" style="padding:5px 8px" onchange="builderDays[${builderCurrentDay}].blocks[${bi}].exercises[${ei}].reps=this.value"></div>
-              <div style="flex:0 0 85px"><label style="font-size:10px">Carga</label><input value="${ex.load}" placeholder="80kg" style="padding:5px 8px" onchange="builderDays[${builderCurrentDay}].blocks[${bi}].exercises[${ei}].load=this.value"></div>
-              <div style="flex:0 0 65px"><label style="font-size:10px">Int.%</label><input type="number" value="${ex.intensity}" min="0" max="100" style="padding:5px 8px" onchange="builderDays[${builderCurrentDay}].blocks[${bi}].exercises[${ei}].intensity=+this.value"></div>
-              <div style="flex:0 0 65px"><label style="font-size:10px">RPE</label><input type="number" value="${ex.rpe}" min="1" max="10" style="padding:5px 8px" onchange="builderDays[${builderCurrentDay}].blocks[${bi}].exercises[${ei}].rpe=+this.value"></div>
-              <div style="flex:0 0 80px"><label style="font-size:10px">Descanso</label><input value="${ex.rest}" placeholder="3min" style="padding:5px 8px" onchange="builderDays[${builderCurrentDay}].blocks[${bi}].exercises[${ei}].rest=this.value"></div>
-              <div style="flex:0 0 65px"><label style="font-size:10px">Tempo</label><input value="${ex.tempo}" placeholder="31X0" style="padding:5px 8px" onchange="builderDays[${builderCurrentDay}].blocks[${bi}].exercises[${ei}].tempo=this.value"></div>
-            </div>
-            <div class="form-group" style="margin-top:8px"><label style="font-size:10px">Observaciones</label><input value="${ex.notes||''}" placeholder="Pausa 2s..." style="padding:5px 8px;font-size:12px" onchange="builderDays[${builderCurrentDay}].blocks[${bi}].exercises[${ei}].notes=this.value"></div>
-          </div>`).join('')}
-      </div>`).join('')}`;
-  // Set select values
-  (d.blocks||[]).forEach((b,bi)=>{
-    (b.exercises||[]).forEach((ex,ei)=>{
-      // Set select value para este ejercicio específico
-      const thisBlockSels = c.querySelectorAll(`[data-bi="${bi}"][data-ei="${ei}"]`);
-      if(thisBlockSels[0]) thisBlockSels[0].value = ex.exId||'';
-    });
-  });
-}
-window.setExId = (di,bi,ei,val) => { if(builderDays[di]&&builderDays[di].blocks[bi]&&builderDays[di].blocks[bi].exercises[ei]) builderDays[di].blocks[bi].exercises[ei].exId=val; };
-window.addExToBlock = (di,bi) => { builderDays[di].blocks[bi].exercises.push({exId:'',sets:3,reps:'5',load:'',intensity:'',rpe:7,rest:'3min',tempo:'',notes:''}); renderBuilderDay(); };
-window.removeEx = (di,bi,ei) => { builderDays[di].blocks[bi].exercises.splice(ei,1); renderBuilderDay(); };
-
-window.saveRoutine = async editId => {
-  // Leer TODOS los selects del DOM antes de guardar
-  const c = ge('builder-day-content');
-  if(c){
-    const d = builderDays[builderCurrentDay];
-    if(d){
-      (d.blocks||[]).forEach((b,bi)=>{
-        (b.exercises||[]).forEach((ex,ei)=>{
-          const sel = c.querySelector(`[data-bi="${bi}"][data-ei="${ei}"]`);
-          if(sel && sel.value) ex.exId = sel.value;
-        });
-      });
-    }
-  }
-  const name = ge('rt-name').value.trim();
-  if(!name){ showToast('Nombre obligatorio','error'); return; }
-  const btn=ge('save-rt-btn'); btn.disabled=true; btn.innerHTML='<span class="spin"></span>';
-  const existing = editId ? (cache.routines.find(r=>r.id===editId)||{}) : {};
-  const data = {name, objective:ge('rt-obj').value, startDate:ge('rt-start').value||null, endDate:ge('rt-end').value||null, days:builderDays, status:'active', assignedTo:existing.assignedTo||[]};
-  try {
-    if(editId){
-      await updateDoc2('routines',editId,{name:data.name,objective:data.objective,startDate:data.startDate,endDate:data.endDate,days:data.days});
-      Object.assign(cache.routines.find(r=>r.id===editId),data);
-    } else {
-      const newR = await addDoc2('routines',data);
-      cache.routines.unshift(newR);
-    }
-    ge('modal-box').classList.remove('modal-lg');
-    closeModal(); renderRoutines(); showToast('Rutina guardada','success');
-  } catch(e){ showToast('Error: '+e.message,'error'); }
-  finally { btn.disabled=false; btn.innerHTML='Guardar rutina'; }
-};
-
-// ── ASSIGN ───────────────────────────────────────────
-window.openAssignModal = (athleteId, routineId) => {
-  openModal('Asignar rutina',`
-    <div class="form-group"><label>Deportista</label><select id="assign-athlete"><option value="">— Seleccionar —</option>${cache.athletes.map(a=>`<option value="${a.id}" ${a.id===athleteId?'selected':''}>${a.name}</option>`).join('')}</select></div>
-    <div class="form-group"><label>Rutina</label><select id="assign-routine"><option value="">— Seleccionar —</option>${cache.routines.map(r=>`<option value="${r.id}" ${r.id===routineId?'selected':''}>${r.name}</option>`).join('')}</select></div>
-    <div class="divider"></div>
-    <div class="flex gap8 je"><button class="btn btn-secondary" onclick="closeModal()">Cancelar</button><button class="btn btn-primary" id="assign-btn" onclick="doAssign()">Asignar</button></div>`);
-};
-window.doAssign = async () => {
-  const aid=ge('assign-athlete').value, rid=ge('assign-routine').value;
-  if(!aid||!rid){ showToast('Selecciona ambos campos','error'); return; }
-  const btn=ge('assign-btn'); btn.disabled=true;
-  try {
-    const r = cache.routines.find(x=>x.id===rid);
-    if(!r.assignedTo) r.assignedTo=[];
-    if(!r.assignedTo.includes(aid)){
-      r.assignedTo.push(aid);
-      await updateDoc2('routines',rid,{assignedTo:r.assignedTo});
-    }
-    closeModal(); showToast('Rutina asignada','success');
-    if(currentPage==='routines') renderRoutines();
-    if(currentPage==='dashboard') renderDashboard();
-  } catch(e){ showToast('Error','error'); }
-  finally { btn.disabled=false; }
-};
-
-// ── EXERCISES ────────────────────────────────────────
-function renderExercises(){
-  const q=(ge('ex-search')||{}).value||'', cat=(ge('ex-filter-cat')||{}).value||'';
-  const filtered=cache.exercises.filter(e=>(!q||e.name.toLowerCase().includes(q.toLowerCase())||(e.muscles||'').toLowerCase().includes(q.toLowerCase()))&&(!cat||e.category===cat));
-  ge('exercises-count').textContent=`${cache.exercises.length} ejercicios`;
-  const catColors={Fuerza:'badge-green',Potencia:'badge-warn',Movilidad:'badge-blue',Core:'badge-accent',Resistencia:'badge-green',Técnica:'badge-blue'};
-  const grid=ge('exercises-grid');
-  if(!filtered.length){ grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🏋</div><div class="empty-title">No encontrado</div></div>`; return; }
-  grid.innerHTML=filtered.map(e=>{
-    const ytId=e.video?e.video.match(/(?:v=|youtu\.be\/)([\w-]{11})/)?.[1]:null;
-    return `<div class="card-sm" style="padding:0;overflow:hidden">
-      ${e.image?`<img src="${e.image}" alt="${e.name}" style="width:100%;height:160px;object-fit:cover;display:block" onerror="this.style.display='none'">`:
-        ytId?`<img src="https://img.youtube.com/vi/${ytId}/mqdefault.jpg" alt="${e.name}" style="width:100%;height:160px;object-fit:cover;display:block">`:
-        `<div style="height:80px;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:32px">🏋</div>`}
-      <div style="padding:14px">
-        <div class="flex ac jb" style="margin-bottom:8px"><div style="font-size:15px;font-weight:700">${e.name}</div><span class="badge ${catColors[e.category]||'badge-accent'}">${e.category||''}</span></div>
-        <div class="flex gap8" style="margin-bottom:8px;flex-wrap:wrap">${e.pattern?`<span class="tag">${e.pattern}</span>`:''}<span class="tag">${e.level||''}</span></div>
-        ${e.muscles?`<div style="font-size:12px;color:var(--text2);margin-bottom:6px">${e.muscles}</div>`:''}
-        ${e.cues?`<div style="font-size:11px;color:var(--text3);margin-bottom:4px">💡 ${e.cues}</div>`:''}
-        ${e.errors?`<div style="font-size:11px;color:rgba(255,71,87,.7);margin-bottom:6px">⚠️ ${e.errors}</div>`:''}
-        ${ytId?`<button onclick="openVideoModal('${ytId}','${e.name.replace(/'/g,"\'")}')" style="font-size:11px;color:var(--accent2);background:none;border:none;cursor:pointer;padding:0;margin-bottom:6px">▶ Ver video</button>`:''}
-        <div class="flex gap8 mt8"><button class="btn btn-secondary btn-sm fw" onclick="openExerciseModal('${e.id}')">Editar</button><button class="btn btn-danger btn-sm" onclick="deleteExercise('${e.id}')">✕</button></div>
-      </div>
-    </div>`;
-  }).join('');
-}
-window.renderExercises = renderExercises;
-
-window.openExerciseModal = id => {
-  const e=id?cache.exercises.find(x=>x.id===id):null;
-  openModal(e?`Editar: ${e.name}`:'Nuevo ejercicio',`
-    <div class="form-group"><label>Nombre *</label><input id="exf-name" value="${e?e.name:''}" placeholder="Sentadilla frontal"></div>
-    <div class="grid2">
-      <div class="form-group"><label>Categoría</label><select id="exf-cat">${['Fuerza','Potencia','Movilidad','Core','Resistencia','Técnica'].map(c=>`<option ${e&&e.category===c?'selected':''}>${c}</option>`).join('')}</select></div>
-      <div class="form-group"><label>Nivel</label><select id="exf-level">${['Básico','Intermedio','Avanzado'].map(l=>`<option ${e&&e.level===l?'selected':''}>${l}</option>`).join('')}</select></div>
-      <div class="form-group"><label>Patrón</label><input id="exf-pattern" value="${e?e.pattern||'':''}" placeholder="Rodilla dominante"></div>
-      <div class="form-group"><label>Músculos</label><input id="exf-muscles" value="${e?e.muscles||'':''}" placeholder="Cuádriceps, glúteos..."></div>
-    </div>
-    <div class="form-group"><label>Video (URL)</label><input id="exf-video" value="${e?e.video||'':''}" placeholder="https://youtube.com/..."></div>
-    <div class="form-group"><label>Indicaciones técnicas</label><textarea id="exf-cues">${e?e.cues||'':''}</textarea></div>
-    <div class="form-group"><label>Errores comunes</label><textarea id="exf-errors">${e?e.errors||'':''}</textarea></div>
-    <div class="divider"></div>
-    <div class="flex gap8 je">
-      ${e?`<button class="btn btn-danger" onclick="deleteExercise('${e.id}')">Eliminar</button>`:''}
-      <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
-      <button class="btn btn-primary" id="save-ex-btn" onclick="saveExercise('${id||''}')">Guardar</button>
-    </div>`);
-};
-window.saveExercise = async id => {
-  const name=ge('exf-name').value.trim();
-  if(!name){ showToast('Nombre obligatorio','error'); return; }
-  const btn=ge('save-ex-btn'); btn.disabled=true; btn.innerHTML='<span class="spin"></span>';
-  const imgEl=ge('exf-image'); const data={name,category:ge('exf-cat').value,level:ge('exf-level').value,pattern:ge('exf-pattern').value,muscles:ge('exf-muscles').value,image:imgEl?imgEl.value:'',video:ge('exf-video').value,cues:ge('exf-cues').value,errors:ge('exf-errors').value};
-  try {
-    if(id){ await updateDoc2('exercises',id,data); Object.assign(cache.exercises.find(x=>x.id===id),data); }
-    else { const newE=await addDoc2('exercises',data); cache.exercises.push(newE); }
-    closeModal(); renderExercises(); showToast('Ejercicio guardado','success');
-  } catch(e){ showToast('Error','error'); }
-  finally { btn.disabled=false; btn.innerHTML='Guardar'; }
-};
-window.deleteExercise = async id => {
-  if(!confirm('¿Eliminar ejercicio?')) return;
-  await deleteDoc2('exercises',id);
-  cache.exercises=cache.exercises.filter(e=>e.id!==id);
-  closeModal(); renderExercises(); showToast('Eliminado','success');
-};
-
-// ── COMPLIANCE ───────────────────────────────────────
-function renderCompliance(){
-  const active=cache.athletes.filter(a=>a.active);
-  const done=cache.logs.filter(l=>l.status==='completed').length;
-  const pct=cache.logs.length?Math.round(done/cache.logs.length*100):0;
-  let html=`<div class="grid4" style="margin-bottom:20px">
-    <div class="stat-card accent"><div class="stat-lbl">Total sesiones</div><div class="stat-val">${cache.logs.length}</div></div>
-    <div class="stat-card green"><div class="stat-lbl">Completadas</div><div class="stat-val">${done}</div></div>
-    <div class="stat-card blue"><div class="stat-lbl">% global</div><div class="stat-val">${pct}%</div></div>
-    <div class="stat-card warn"><div class="stat-lbl">Deportistas</div><div class="stat-val">${active.length}</div></div>
-  </div><div class="table-wrap"><table><thead><tr><th>Deportista</th><th>Deporte</th><th>Sesiones</th><th>Completadas</th><th>RPE prom.</th><th>Cumplimiento</th></tr></thead><tbody>`;
-  active.forEach(a=>{
-    const al=cache.logs.filter(l=>l.athleteId===a.id),d2=al.filter(l=>l.status==='completed').length,ap=al.length?Math.round(d2/al.length*100):0;
-    const rpes=al.filter(l=>l.rpe).map(l=>l.rpe),avgRpe=rpes.length?(rpes.reduce((a,b)=>a+b,0)/rpes.length).toFixed(1):'—';
-    const col=ap>=70?'var(--success)':ap>=40?'var(--warn)':'var(--danger)';
-    html+=`<tr><td><div class="flex ac gap8"><div class="avatar avatar-green" style="width:28px;height:28px;font-size:12px">${a.name[0]}</div>${a.name}</div></td><td><span class="tag">${a.sport||'—'}</span></td><td>${al.length}</td><td>${d2}</td><td>${avgRpe}</td><td><div class="flex ac gap8"><div class="progress-bar" style="width:80px"><div class="progress-fill" style="width:${ap}%;background:${col}"></div></div><span style="font-size:13px;font-weight:700;color:${col}">${ap}%</span></div></td></tr>`;
-  });
-  html+=`</tbody></table></div>`;
-  if(cache.logs.length){
-    html+=`<div class="section-title mt24">Últimas sesiones</div><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Deportista</th><th>Estado</th><th>RPE</th><th>Comentario</th></tr></thead><tbody>`;
-    cache.logs.slice(0,15).forEach(l=>{
-      const a=cache.athletes.find(x=>x.id===l.athleteId);
-      html+=`<tr><td>${l.date}</td><td>${a?a.name:'—'}</td><td><span class="badge ${l.status==='completed'?'badge-green':'badge-warn'}">${l.status==='completed'?'Completado':'Incompleto'}</span></td><td>${l.rpe||'—'}</td><td style="color:var(--text2);font-size:12px">${l.note||'—'}</td></tr>`;
-    });
-    html+=`</tbody></table></div>`;
-  }
-  ge('compliance-content').innerHTML=html;
-}
-
-// ── ATHLETE PORTAL ───────────────────────────────────
-async function initAthlete(){
-  showLoading(true);
-  try {
-    const athSnap = await getFiltered('athletes','userId',currentUser.id);
-    if(!athSnap.length){
-      // buscar por athleteId en users
-      const userSnap = await getDoc(doc(db,'users',currentUser.id));
-      const uid = userSnap.data()?.athleteId;
-      if(uid){ const a=await getDoc(doc(db,'athletes',uid)); currentAthlete=a.exists()?{id:a.id,...a.data()}:null; }
-    } else { currentAthlete=athSnap[0]; }
-    cache.exercises = await getAll('exercises');
-    if(currentAthlete){
-      const allR = await getAll('routines');
-      cache.routines = allR.filter(r=>(r.assignedTo||[]).includes(currentAthlete.id));
-      cache.logs = await getFiltered('logs','athleteId',currentAthlete.id);
-    }
-  } finally { showLoading(false); }
-  ge('athlete-portal').classList.remove('hidden');
-  ge('ath-name-top').textContent=currentUser.name;
-  ge('ath-avatar').textContent=currentUser.name[0];
-  athTab('today',document.querySelector('#athlete-portal .tab'));
-}
-
-window.athTab = (tab,el) => {
-  document.querySelectorAll('#athlete-portal .tab').forEach(t=>t.classList.remove('active'));
-  if(el) el.classList.add('active');
-  ['today','history','profile'].forEach(t=>ge('ath-'+t).classList.add('hidden'));
-  ge('ath-'+tab).classList.remove('hidden');
-  if(tab==='today') renderAthToday();
-  if(tab==='history') renderAthHistory();
-  if(tab==='profile') renderAthProfile();
-};
-
-function renderAthToday(){
-  const c=ge('ath-today');
-  if(!currentAthlete){ c.innerHTML=`<div class="empty-state"><div class="empty-icon">👋</div><div class="empty-title">Bienvenido</div><div class="empty-sub">Tu entrenador pronto asignará tus rutinas</div></div>`; return; }
-  const dayMap=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
-  const todayKey=dayMap[new Date().getDay()];
-  let html=`<div style="font-size:13px;color:var(--text2);margin-bottom:16px">📅 Hoy es <strong>${todayKey}</strong></div>`;
-  let found=false;
-  cache.routines.forEach(r=>{
-    (r.days||[]).filter(d=>d.day===todayKey).forEach(d=>{
-      found=true;
-      html+=`<div class="workout-card"><div class="workout-card-header"><div><div style="font-size:15px;font-weight:700">${r.name}</div><div style="font-size:12px;color:var(--text2)">${d.label}</div></div><span class="badge badge-warn">Pendiente</span></div><div class="workout-card-body">`;
-      (d.blocks||[]).forEach(b=>{
-        html+=`<div class="section-title">${b.name}</div>`;
-        (b.exercises||[]).forEach((ex,ei)=>{
-          const exData=cache.exercises.find(x=>x.id===ex.exId);
-          const uid=`ex_${r.id}_${b.name}_${ei}`.replace(/\s/g,'_');
-          html+=`<div class="ex-row"><div class="ex-check" id="chk_${uid}" onclick="toggleExCheck('${uid}')"></div>
-            <div style="flex:1"><div style="font-size:14px;font-weight:600">${exData?exData.name:ex.exId?'Cargando...':'Sin ejercicio asignado'}</div>
-            <div class="flex gap8 mt8" style="flex-wrap:wrap"><span class="tag">${ex.sets}×${ex.reps}</span>${ex.load?`<span class="tag">${ex.load}</span>`:''}<span class="tag">RPE ${ex.rpe}</span><span class="tag">⏱ ${ex.rest}</span></div>
-            ${ex.notes?`<div style="font-size:11px;color:var(--text3);margin-top:6px">💡 ${ex.notes}</div>`:''}
-            ${(()=>{if(!exData?.video)return '';const m=exData.video.match(/(?:v=|youtu\.be\/)?([\w-]{11})/);return m?`<button onclick="openVideoModal('${m[1]}','${(exData.name||'').replace(/'/g,"\\'")}')" style="font-size:11px;color:var(--accent2);background:none;border:none;cursor:pointer;padding:0;margin-top:6px;display:block">▶ Ver video</button>`:'';})()} 
-          </div></div>`;
-        });
-      });
-      html+=`<div class="divider"></div><div class="section-title">Registrar sesión</div>
-        <div class="grid2">
-          <div class="form-group"><label>RPE real (1-10)</label><div class="rpe-grid">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<div class="rpe-btn" onclick="selectRpe(${n},this)">${n}</div>`).join('')}</div></div>
-          <div class="form-group"><label>Comentario al entrenador</label><textarea id="ath-comment-${r.id}" placeholder="¿Cómo te sentiste?"></textarea></div>
+function renderEjs(){
+  const list=document.getElementById('ejs-list')
+  if(!list)return
+  list.innerHTML=ejState.map((ej,idx)=>{
+    const isActive=!ej.done&&ejState.findIndex(e=>!e.done)===idx
+    const rpeColors={1:'sel-g',2:'sel-g',3:'sel-g',4:'sel-g',5:'sel-g',6:'sel-g',7:'sel-y',8:'sel-y',9:'sel-r',10:'sel-r'}
+    return `<div class="ej-card ${ej.done?'done':isActive?'active':''}" id="ejc-${ej.id}">
+      <div class="ej-head" onclick="activateEj('${ej.id}')">
+        <div class="ej-num" style="${ej.done?'background:var(--greenbg);color:var(--green)':isActive?'background:var(--accentbg);color:var(--accent2)':'background:var(--bg4);color:var(--text3)'}">${ej.done?'✓':idx+1}</div>
+        <div style="flex:1">
+          <div style="font-size:.88rem;font-weight:700">${ej.nombre}</div>
+          ${!isActive?`<div style="font-size:.72rem;color:var(--text2)">${ej.series}×${ej.reps} · RPE obj. ${ej.rpe}</div>`:''}
+          ${ej.done&&ej.carga?`<div style="font-size:.72rem;color:var(--green)">${ej.carga} kg · RPE ${ej.rpe}</div>`:''}
+          ${ej.obs?`<div style="font-size:.68rem;color:var(--text3);font-style:italic;margin-top:1px">📋 ${ej.obs}</div>`:''}
         </div>
-        <div class="flex gap8 je">
-          <button class="btn btn-secondary" onclick="saveAthLog('incomplete','${r.id}')">Marcar incompleto</button>
-          <button class="btn btn-primary" onclick="saveAthLog('completed','${r.id}')">✓ Completado</button>
-        </div></div></div>`;
-    });
-  });
-  if(!found) html+=`<div class="empty-state"><div class="empty-icon">😎</div><div class="empty-title">¡Día de descanso!</div><div class="empty-sub">No tienes entrenamiento hoy.</div></div>`;
-  if(cache.routines.length){
-    html+=`<div class="section-title mt24">Mis rutinas</div>`;
-    cache.routines.forEach(r=>{ html+=`<div class="card-sm" style="margin-bottom:8px"><div style="font-size:14px;font-weight:600">${r.name}</div><div style="font-size:12px;color:var(--text2);margin-top:3px">${(r.days||[]).length} día(s)</div></div>`; });
+        ${ej.done?'<span class="pill pill-green">✓</span>':''}
+      </div>
+      ${isActive?`<div class="ej-body">
+        <div class="spec-row">
+          <span class="spec">${ej.series} series</span>
+          <span class="spec">${ej.reps} reps</span>
+          <span class="spec">RPE obj. ${ej.rpe}</span>
+          <span class="spec">Desc. ${ej.descanso}s</span>
+        </div>
+        <div style="font-size:.72rem;color:var(--text2);margin-bottom:.4rem">Carga usada (kg)</div>
+        <div class="carga-row">
+          <button class="pm-btn" onclick="ajustarCarga('${ej.id}',-2.5)">−</button>
+          <input class="carga-inp" type="number" value="${ej.carga||''}" placeholder="0" oninput="setCarga('${ej.id}',this.value)" min="0">
+          <button class="pm-btn" onclick="ajustarCarga('${ej.id}',2.5)">+</button>
+        </div>
+        <div style="font-size:.72rem;color:var(--text2);margin-bottom:.4rem">RPE final <span style="color:var(--text3)">(objetivo: ${ej.rpe})</span></div>
+        <div class="rpe-grid">
+          ${[1,2,3,4,5,6,7,8,9,10].map(n=>{
+            const sel=ejState.find(e=>e.id===ej.id)?.rpe===n
+            const cls=sel?(n<=6?'sel-g':n<=8?'sel-y':'sel-r'):''
+            return `<button class="rpe-btn ${cls}" onclick="setRpe('${ej.id}',${n})">${n}</button>`
+          }).join('')}
+        </div>
+        <textarea class="obs-inp" rows="2" placeholder="Comentario breve (opcional)..." oninput="setObs('${ej.id}',this.value)">${ej.comentario}</textarea>
+        <button class="${ejState.find(e=>e.id===ej.id)?.rpe?'btn-completar':'btn-completar'}" ${ejState.find(e=>e.id===ej.id)?.rpe?'':'disabled'} onclick="completarEj('${ej.id}')">
+          ${ejState.find(e=>e.id===ej.id)?.rpe?'Marcar como completado ✓':'Selecciona un RPE para continuar'}
+        </button>
+      </div>`:''}
+    </div>`
+  }).join('')
+}
+function activateEj(id){const e=ejState.find(x=>x.id===id);if(e&&!e.done)renderEjs()}
+function ajustarCarga(id,delta){
+  const e=ejState.find(x=>x.id===id);if(!e)return
+  e.carga=Math.max(0,Math.round((e.carga+delta)*2)/2)
+  const inp=document.querySelector(`#ejc-${id} .carga-inp`);if(inp)inp.value=e.carga
+}
+function setCarga(id,v){const e=ejState.find(x=>x.id===id);if(e)e.carga=parseFloat(v)||0}
+function setRpe(id,n){
+  const e=ejState.find(x=>x.id===id);if(!e)return
+  e.rpe=n;renderEjs()
+}
+function setObs(id,v){const e=ejState.find(x=>x.id===id);if(e)e.comentario=v}
+function completarEj(id){
+  const e=ejState.find(x=>x.id===id);if(!e||!e.rpe)return
+  e.done=true
+  toast(`${e.nombre} ✓`,'ok')
+  // ¿Todos listos?
+  if(ejState.every(e=>e.done)){
+    const rpeProm=Math.round(ejState.filter(e=>e.rpe).reduce((s,e)=>s+e.rpe,0)/ejState.filter(e=>e.rpe).length*10)/10
+    const regs=getRegistros()
+    regs.push({
+      id:'reg'+Date.now(),alumnoId:currentUser.id,
+      rutinaId:ejState[0]?.rutinaId,fecha:hoy(),
+      completado:true,rpePromedio:rpeProm,
+      ejercicios:ejState.map(e=>({ejId:e.id,carga:e.carga,rpe:e.rpe,comentario:e.comentario}))
+    })
+    save('registros',regs)
+    ejState=[]
+    alumTab('hoy')
+    return
   }
-  c.innerHTML=html;
+  const pct=ejState.filter(e=>e.done).length/ejState.length*100
+  const pb=document.getElementById('a-prog');if(pb)pb.style.width=pct+'%'
+  renderEjs()
+}
+function renderAlumnoHist(main){
+  const regs=getRegistros().filter(r=>r.alumnoId===currentUser.id).sort((a,b)=>b.fecha.localeCompare(a.fecha))
+  const dias=['D','L','M','X','J','V','S']
+  const semana=Array.from({length:7},(_,i)=>{
+    const d=new Date();d.setDate(d.getDate()-i)
+    const f=d.toISOString().split('T')[0]
+    const reg=regs.find(r=>r.fecha===f)
+    return{dia:dias[d.getDay()],fecha:f,reg}
+  }).reverse()
+  const cumpl=regs.filter(r=>r.completado).length
+  const rpeAll=regs.filter(r=>r.rpePromedio).map(r=>r.rpePromedio)
+  const rpeProm=rpeAll.length?Math.round(rpeAll.reduce((s,v)=>s+v,0)/rpeAll.length*10)/10:null
+  main.innerHTML=`
+    <div class="sec-title">Esta semana</div>
+    <div class="card"><div class="week-row">${semana.map(d=>`<div class="day-c">
+      <div class="day-lbl">${d.dia}</div>
+      <div class="day-dot ${d.reg?.completado?'day-ok':d.fecha<hoy()?'day-no':'day-nd'}">${d.reg?.completado?'✓':d.fecha<hoy()?'✗':'—'}</div>
+    </div>`).join('')}</div></div>
+    <div class="metric-grid">
+      <div class="metric"><div class="metric-lbl">Sesiones totales</div><div class="metric-val" style="color:var(--green)">${cumpl}</div></div>
+      <div class="metric"><div class="metric-lbl">RPE promedio</div><div class="metric-val" style="color:${rpeProm?colorRPE(rpeProm):'var(--text)'}">${rpeProm||'—'}</div></div>
+    </div>
+    <div class="sec-title">Últimos registros</div>
+    ${regs.slice(0,5).map(r=>`<div class="card" style="margin-bottom:.5rem">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><div style="font-weight:700;font-size:.85rem">${fFecha(r.fecha)}</div>
+        <div class="card-sub">${r.ejercicios?.length||0} ejercicios</div></div>
+        <span class="pill ${pillRPE(r.rpePromedio||7)}">RPE ${r.rpePromedio}</span>
+      </div>
+    </div>`).join('')||'<div class="empty"><div class="empty-ico">📝</div><div class="empty-txt">Sin registros aún</div></div>'}
+    <button onclick="alumTab('hoy')" style="width:100%;margin-top:.5rem;padding:.7rem;border:1px solid var(--border2);background:transparent;border-radius:var(--r);color:var(--text2);font-size:.85rem">← Volver a mi rutina</button>
+  `
+}
+function renderAlumnoPerfil(main){
+  const prof=getProfesores().find(p=>p.id===currentUser.profId)
+  main.innerHTML=`
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:.85rem;margin-bottom:1rem">
+        <div class="ava" style="width:50px;height:50px;font-size:.95rem;background:var(--accentbg);color:var(--accent2)">${iniciales(currentUser.nombre)}</div>
+        <div>
+          <div style="font-weight:800;font-size:1rem;letter-spacing:-.3px">${currentUser.nombre}</div>
+          <div class="card-sub">${currentUser.grupo||''} · ${currentUser.nivel||''}</div>
+        </div>
+      </div>
+      <div style="height:1px;background:var(--border2);margin:.75rem 0"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+        <div class="ps"><div class="ps-v" style="color:var(--accent2)">${currentUser.nivel||'—'}</div><div class="ps-l">Nivel</div></div>
+        <div class="ps"><div class="ps-v" style="color:${currentUser.pagado?'var(--green)':'var(--red)'}">${currentUser.pagado?'Al día':'Pendiente'}</div><div class="ps-l">Membresía</div></div>
+      </div>
+    </div>
+    ${prof?.mpLink?`<div class="pago-banner">
+      <div style="flex:1">
+        <div style="font-size:.82rem;font-weight:700">Renovar membresía</div>
+        <div style="font-size:.72rem;color:var(--text2)">${prof.precio||''}</div>
+        ${prof.msg?`<div style="font-size:.68rem;color:var(--text3);margin-top:2px">${prof.msg}</div>`:''}
+      </div>
+      <a href="${prof.mpLink}" target="_blank" class="btn-pagar">Pagar →</a>
+    </div>`:''}
+    <button onclick="logout()" style="width:100%;margin-top:.25rem;padding:.7rem;border:1px solid var(--border2);background:transparent;border-radius:var(--r);color:var(--text2);font-size:.85rem">Cerrar sesión</button>
+  `
 }
 
-window.selectRpe = (n,el) => { selectedRpe=n; document.querySelectorAll('.rpe-btn').forEach(b=>b.classList.remove('sel')); el.classList.add('sel'); };
-window.toggleExCheck = uid => { const chk=ge('chk_'+uid); const done=chk.classList.toggle('done'); chk.textContent=done?'✓':''; };
-
-window.saveAthLog = async (status,routineId) => {
-  if(!currentAthlete){ showToast('Error: perfil no encontrado','error'); return; }
-  const comment=ge('ath-comment-'+routineId);
-  const today=new Date().toISOString().split('T')[0];
-  try {
-    const newLog=await addDoc2('logs',{athleteId:currentAthlete.id,routineId,status,rpe:selectedRpe,note:comment?comment.value:'',date:today});
-    cache.logs.unshift(newLog);
-    showToast(status==='completed'?'¡Sesión completada! 💪':'Sesión marcada como incompleta','success');
-    selectedRpe=null; renderAthToday();
-  } catch(e){ showToast('Error al guardar','error'); console.error(e); }
-};
-
-function renderAthHistory(){
-  const c=ge('ath-history');
-  if(!cache.logs.length){ c.innerHTML=`<div class="empty-state"><div class="empty-icon">📊</div><div class="empty-title">Sin historial</div></div>`; return; }
-  const done=cache.logs.filter(l=>l.status==='completed').length;
-  const rpes=cache.logs.filter(l=>l.rpe).map(l=>l.rpe);
-  const avgRpe=rpes.length?(rpes.reduce((a,b)=>a+b,0)/rpes.length).toFixed(1):'—';
-  c.innerHTML=`<div class="grid3" style="margin-bottom:20px">
-    <div class="stat-card green"><div class="stat-lbl">Completadas</div><div class="stat-val">${done}</div></div>
-    <div class="stat-card accent"><div class="stat-lbl">Total</div><div class="stat-val">${cache.logs.length}</div></div>
-    <div class="stat-card blue"><div class="stat-lbl">RPE prom.</div><div class="stat-val">${avgRpe}</div></div>
-  </div>
-  ${cache.logs.map(l=>{
-    const r=cache.routines.find(x=>x.id===l.routineId);
-    return `<div class="card-sm flex ac gap12" style="margin-bottom:8px"><div class="avatar ${l.status==='completed'?'avatar-green':'avatar-blue'}" style="font-size:12px">${l.status==='completed'?'✓':'!'}</div><div style="flex:1"><div style="font-size:14px;font-weight:600">${r?r.name:'Sesión'}</div><div style="font-size:12px;color:var(--text2)">${l.date}${l.rpe?' · RPE '+l.rpe:''}</div>${l.note?`<div style="font-size:12px;color:var(--text3)">${l.note}</div>`:''}</div><span class="badge ${l.status==='completed'?'badge-green':'badge-warn'}">${l.status==='completed'?'Completado':'Incompleto'}</span></div>`;
-  }).join('')}`;
+// ═══════════════════════════════════════════════════════════
+//  MODALES / TOAST
+// ═══════════════════════════════════════════════════════════
+function openModal(id){document.getElementById(id).classList.add('show')}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+function closeMOutside(e,id){if(e.target===document.getElementById(id))closeModal(id)}
+let _tt;
+function toast(msg,type='inf'){
+  const t=document.getElementById('toast');clearTimeout(_tt)
+  t.textContent=msg;t.className='toast show '+type
+  _tt=setTimeout(()=>t.classList.remove('show'),2600)
 }
 
-function renderAthProfile(){
-  const a=currentAthlete;
-  if(!a){ ge('ath-profile').innerHTML='<div class="empty-state"><div class="empty-title">Perfil no encontrado</div></div>'; return; }
-  const age=a.dob?Math.floor((Date.now()-new Date(a.dob))/(365.25*24*3600*1000)):'—';
-  ge('ath-profile').innerHTML=`<div class="card"><div class="flex ac gap12" style="margin-bottom:20px"><div class="avatar avatar-green" style="width:56px;height:56px;font-size:22px">${a.name[0]}</div><div><div style="font-size:20px;font-weight:700">${a.name}</div><div style="font-size:13px;color:var(--text2)">${a.sport||''} · ${a.category||''}</div></div></div>
-    <div class="grid2"><div><label>Edad</label><div style="font-size:18px;font-weight:700">${age} años</div></div><div><label>Nivel</label><div style="font-weight:600">${a.level||'—'}</div></div><div style="grid-column:1/-1"><label>Objetivo</label><div style="font-size:14px;color:var(--text2)">${a.goal||'—'}</div></div>${a.notes?`<div style="grid-column:1/-1"><label>Observaciones</label><div style="font-size:13px;color:var(--warn)">${a.notes}</div></div>`:''}</div></div>`;
+// ═══════════════════════════════════════════════════════════
+//  SERVICE WORKER (PWA offline)
+// ═══════════════════════════════════════════════════════════
+if('serviceWorker' in navigator){
+  const sw=`self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))))`
+  const blob=new Blob([sw],{type:'application/javascript'})
+  navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(()=>{})
 }
-
-// ── INIT COACH USER ──────────────────────────────────
-// Crear usuario coach si no existe
-(async()=>{
-  try {
-    const existing = await getFiltered('users','username','coach@trainos.cl');
-    if(!existing.length){
-      await addDoc2('users',{username:'coach@trainos.cl',password:'coach123',role:'coach',name:'Marcelo Parada'});
-    }
-  } catch(e){ console.error(e); }
-})();
-
-window.openVideoModal = (ytId, title) => {
-  openModal(title, `<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:var(--radius)"><iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none" allow="autoplay;encrypted-media" allowfullscreen></iframe></div><div class="flex je mt12"><button class="btn btn-secondary" onclick="closeModal()">Cerrar</button></div>`);
-};
-
 </script>
 </body>
 </html>
